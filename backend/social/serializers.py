@@ -50,3 +50,8 @@ class PostSerializer(serializers.ModelSerializer):
         #     "comments_count",
         #     "author",
         # )
+
+    def create(self, validated_data):
+        profile = self.context["request"].user.profile
+        validated_data["author"] = profile
+        return super().create(validated_data)

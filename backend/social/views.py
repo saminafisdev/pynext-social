@@ -18,5 +18,7 @@ class PostViewSet(viewsets.ModelViewSet):
             .order_by("-created_at")
         )
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context

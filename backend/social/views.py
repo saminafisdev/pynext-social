@@ -31,9 +31,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthorOrReadOnly]
 
     def get_queryset(self):
-        return Comment.objects.select_related("author").order_by("-created_at")
+        post_id = self.kwargs.get("post_pk")
+        return (
+            Comment.objects.select_related("author")
+            .order_by("-created_at")
+            .filter(post_id=post_id)
+        )
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context["request"] = self.request
-        return context
+    def perform_create(self, serializer):
+        post_id = self.kwargs.get("post_pk")
+        serializer.save(author=self.request.user.profile, post_id=post_id)

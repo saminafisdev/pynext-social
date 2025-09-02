@@ -2,8 +2,8 @@ from django.db.models import Count
 from rest_framework import viewsets
 
 from .permissions import IsAuthorOrReadOnly
-from .models import Post
-from .serializers import PostSerializer
+from .models import Comment, Post
+from .serializers import CommentSerializer, PostSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -19,6 +19,19 @@ class PostViewSet(viewsets.ModelViewSet):
             .select_related("author")
             .order_by("-created_at")
         )
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthorOrReadOnly]
+
+    def get_queryset(self):
+        return Comment.objects.select_related("author").order_by("-created_at")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

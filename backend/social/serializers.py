@@ -14,7 +14,7 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = ("id", "profile", "created_at")
-        # read_only_fields = ("id", "created_at")
+        read_only_fields = ("id", "profile", "created_at")
 
 
 class CommentSerializer(serializers.ModelSerializer):

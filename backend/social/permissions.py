@@ -14,3 +14,13 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
 
         # Write permissions are only allowed to the author of the post.
         return obj.author.user == request.user
+
+
+class IsPostLikeOwner(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of a post like to delete it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Write permissions are only allowed to the owner of the post like.
+        return obj.profile.user == request.user

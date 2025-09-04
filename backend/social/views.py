@@ -2,7 +2,7 @@ from django.db.models import Count, Exists, OuterRef
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsAuthorOrReadOnly, IsPostLikeOwner
 from .models import Comment, PostLike, Post
 from .serializers import CommentSerializer, LikeSerializer, PostSerializer
 
@@ -34,7 +34,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         post_id = self.kwargs.get("post_pk")
@@ -56,6 +56,7 @@ class PostLikeViewSet(
     viewsets.GenericViewSet,
 ):
     serializer_class = LikeSerializer
+    permission_classes = [IsAuthenticated, IsPostLikeOwner]
 
     def get_queryset(self):
         post_id = self.kwargs.get("post_pk")

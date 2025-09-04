@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Exists, OuterRef
 from rest_framework import mixins, viewsets
 
 from .permissions import IsAuthorOrReadOnly
@@ -12,9 +12,14 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthorOrReadOnly]
 
     def get_queryset(self):
+        qs = PostLike.objects.filter(
+            post=OuterRef("pk"), profile=self.request.user.profile
+        )
         return (
             Post.objects.annotate(
-                likes_count=Count("likes"), comments_count=Count("comments")
+                likes_count=Count("likes"),
+                comments_count=Count("comments"),
+                has_liked=Exists(qs),
             )
             .select_related("author")
             .order_by("-created_at")

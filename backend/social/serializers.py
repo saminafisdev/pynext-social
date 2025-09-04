@@ -30,6 +30,7 @@ class PostSerializer(serializers.ModelSerializer):
     author = ProfileSerializer(read_only=True)
     likes_count = serializers.IntegerField(read_only=True)
     comments_count = serializers.IntegerField(read_only=True)
+    has_liked = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Post
@@ -37,6 +38,7 @@ class PostSerializer(serializers.ModelSerializer):
             "id",
             "author",
             "content",
+            "has_liked",
             "likes_count",
             "comments_count",
             "created_at",

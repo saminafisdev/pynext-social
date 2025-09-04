@@ -1,6 +1,6 @@
 from os import read
 from rest_framework import serializers
-from .models import Post, Profile, Like, Comment
+from .models import Post, Profile, PostLike, Comment
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -12,7 +12,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Like
+        model = PostLike
         fields = ("id", "profile", "created_at")
         read_only_fields = ("id", "profile", "created_at")
 

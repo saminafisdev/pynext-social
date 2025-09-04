@@ -2,7 +2,7 @@ from django.db.models import Count
 from rest_framework import mixins, viewsets
 
 from .permissions import IsAuthorOrReadOnly
-from .models import Comment, Like, Post
+from .models import Comment, PostLike, Post
 from .serializers import CommentSerializer, LikeSerializer, PostSerializer
 
 
@@ -53,7 +53,7 @@ class PostLikeViewSet(
 
     def get_queryset(self):
         post_id = self.kwargs.get("post_pk")
-        return Like.objects.filter(post_id=post_id)
+        return PostLike.objects.filter(post_id=post_id)
 
     def perform_create(self, serializer):
         post_id = self.kwargs.get("post_pk")

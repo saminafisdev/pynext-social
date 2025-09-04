@@ -1,5 +1,6 @@
 from django.db.models import Count, Exists, OuterRef
 from rest_framework import mixins, viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from .permissions import IsAuthorOrReadOnly
 from .models import Comment, PostLike, Post
@@ -9,7 +10,7 @@ from .serializers import CommentSerializer, LikeSerializer, PostSerializer
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by("-created_at")
     serializer_class = PostSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         qs = PostLike.objects.filter(

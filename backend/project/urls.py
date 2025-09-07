@@ -24,5 +24,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("social.urls")),
     path("api/auth/", include("djoser.urls")),
-    path("api/auth/", include("djoser.urls.jwt")),
+    path("api/auth/", include("core.urls")),
 ] + debug_toolbar_urls()

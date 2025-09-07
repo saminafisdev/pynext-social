@@ -152,9 +152,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "core.User"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("core.authentication.CustomJWTAuthentication",),
 }
 
 SIMPLE_JWT = {
@@ -164,3 +162,13 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+AUTH_COOKIE = "access"
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5  # 5 minutes
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24  # 1 day
+AUTH_COOKIE_SECURE = env(
+    "AUTH_COOKIE_SECURE"
+)  # Should be True in production with HTTPS
+AUTH_COOKIE_HTTP_ONLY = True
+AUTH_COOKIE_PATH = "/"
+AUTH_COOKIE_SAME_SITE = "None"

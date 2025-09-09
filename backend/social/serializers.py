@@ -1,9 +1,13 @@
 from os import read
 from rest_framework import serializers
+
+from core.serializers import CustomUserSerializer
 from .models import Post, Profile, PostLike, Comment
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+
     class Meta:
         model = Profile
         fields = ("id", "user", "bio")

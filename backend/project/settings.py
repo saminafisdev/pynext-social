@@ -160,8 +160,17 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:5173",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+DJOSER = {
+    "SERIALIZERS": {
+        "current_user": "core.serializers.CustomUserSerializer",
+        "user": "core.serializers.CustomUserSerializer",
+    }
+}
 
 AUTH_COOKIE = "access"
 AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5  # 5 minutes

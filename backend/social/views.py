@@ -1,6 +1,8 @@
 from django.db.models import Count, Exists, OuterRef
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .permissions import IsAuthorOrReadOnly, IsPostLikeOwner
 from .models import Comment, PostLike, Post
@@ -11,6 +13,19 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by("-created_at")
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+
+    @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated])
+    def toggle_like(self, request, pk=None):
+        post = self.get_object()
+        profile = request.user.profile
+
+        like, created = PostLike.objects.get_or_create(post=post, profile=profile)
+
+        if not created:
+            like.delete()
+            return Response({"has_liked": False}, status=status.HTTP_200_OK)
+
+        return Response({"has_liked": True}, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         qs = PostLike.objects.filter(

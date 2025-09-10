@@ -59,7 +59,7 @@ export default function PostCard({ post }: { post: Post }) {
         </div>
         {post.is_owner && (
           <CardAction>
-            <PostMenu />
+            <PostMenu postId={post.id} />
           </CardAction>
         )}
       </CardHeader>

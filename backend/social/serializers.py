@@ -11,7 +11,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ("id", "user", "bio")
-        # read_only_fields = ("id",)
 
 
 class LikeSerializer(serializers.ModelSerializer):
@@ -27,7 +26,6 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ("id", "author", "content", "created_at", "updated_at")
-        # read_only_fields = ("id", "created_at", "updated_at", "author")
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -35,6 +33,7 @@ class PostSerializer(serializers.ModelSerializer):
     likes_count = serializers.IntegerField(read_only=True)
     comments_count = serializers.IntegerField(read_only=True)
     has_liked = serializers.BooleanField(read_only=True)
+    is_owner = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -44,18 +43,15 @@ class PostSerializer(serializers.ModelSerializer):
             "content",
             "has_liked",
             "likes_count",
+            "is_owner",
             "comments_count",
             "created_at",
             "updated_at",
         )
-        # read_only_fields = (
-        #     "id",
-        #     "created_at",
-        #     "updated_at",
-        #     "likes_count",
-        #     "comments_count",
-        #     "author",
-        # )
+
+    def get_is_owner(self, obj):
+        request = self.context.get("request")
+        return request.user.is_authenticated and obj.author.user == request.user
 
     def create(self, validated_data):
         profile = self.context["request"].user.profile

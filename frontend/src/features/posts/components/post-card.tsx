@@ -57,9 +57,11 @@ export default function PostCard({ post }: { post: Post }) {
             </CardDescription>
           </div>
         </div>
-        <CardAction>
-          <PostMenu />
-        </CardAction>
+        {post.is_owner && (
+          <CardAction>
+            <PostMenu />
+          </CardAction>
+        )}
       </CardHeader>
       <CardContent>
         <p>{post.content}</p>

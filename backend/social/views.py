@@ -10,7 +10,6 @@ from .serializers import CommentSerializer, LikeSerializer, PostSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all().order_by("-created_at")
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
@@ -37,7 +36,7 @@ class PostViewSet(viewsets.ModelViewSet):
                 comments_count=Count("comments"),
                 has_liked=Exists(qs),
             )
-            .select_related("author")
+            .select_related("author__user")
             .order_by("-created_at")
         )
 

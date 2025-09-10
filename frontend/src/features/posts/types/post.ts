@@ -4,6 +4,7 @@ export interface Post {
   has_liked: boolean;
   likes_count: number;
   comments_count: number;
+  is_owner: boolean;
   created_at: Date;
   updated_at: Date;
   author: {

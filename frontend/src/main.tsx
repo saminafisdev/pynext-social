@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import "./index.css";
-import RootLayout from "./components/layout/RootLayout.tsx";
+import RootLayout from "@/components/layout/layout.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LoginPage from "./pages/login.tsx";
 import ProfilePage from "./pages/profile.tsx";

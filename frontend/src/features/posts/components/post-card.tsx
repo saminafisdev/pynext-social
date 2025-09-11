@@ -53,13 +53,13 @@ export default function PostCard({ post }: { post: Post }) {
             <CardDescription>
               <span>@{post.author.user.username}</span>
               <span className="mx-2">&bull;</span>
-              {timeAgo(post.updated_at)}
+              {timeAgo(post.created_at)}
             </CardDescription>
           </div>
         </div>
         {post.is_owner && (
           <CardAction>
-            <PostMenu postId={post.id} />
+            <PostMenu post={post} />
           </CardAction>
         )}
       </CardHeader>

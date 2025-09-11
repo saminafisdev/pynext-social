@@ -19,12 +19,15 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Ellipsis, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
+import type { Post } from "@/features/posts/types/post";
+import { PostEditDialog } from "./post-edit-dialog";
 
-export function PostMenu({ postId }: { postId: number }) {
+export function PostMenu({ post }: { post: Post }) {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const { mutate } = useMutation({
+  const { mutate: deletePostMutataion } = useMutation({
     mutationFn: handleDeletePost,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
@@ -32,7 +35,7 @@ export function PostMenu({ postId }: { postId: number }) {
   });
 
   async function handleDeletePost() {
-    const { data } = await api.delete(`posts/${postId}/`);
+    const { data } = await api.delete(`posts/${post.id}/`);
     console.log(data);
   }
 
@@ -45,7 +48,7 @@ export function PostMenu({ postId }: { postId: number }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setIsEditOpen(true)}>
             <Pencil />
             <span>Edit Post</span>
           </DropdownMenuItem>
@@ -63,15 +66,14 @@ export function PostMenu({ postId }: { postId: number }) {
               Are you sure you want to delete this post?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-800 hover:bg-red-700"
-              onClick={() => mutate()}
+              onClick={() => deletePostMutataion()}
             >
               <Trash2 />
               Delete
@@ -79,6 +81,11 @@ export function PostMenu({ postId }: { postId: number }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <PostEditDialog
+        post={post}
+        isEditOpen={isEditOpen}
+        setIsEditOpen={setIsEditOpen}
+      />
     </>
   );
 }

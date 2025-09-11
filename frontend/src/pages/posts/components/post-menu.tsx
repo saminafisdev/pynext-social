@@ -19,7 +19,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Ellipsis, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
-import type { Post } from "@/features/posts/types/post";
+import type { Post } from "@/pages/posts/types/post";
 import { PostEditDialog } from "./post-edit-dialog";
 
 export function PostMenu({ post }: { post: Post }) {

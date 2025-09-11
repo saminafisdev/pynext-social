@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageCircle, ThumbsUp } from "lucide-react";
-import type { Post } from "@/features/posts/types/post";
+import type { Post } from "@/pages/posts/types/post";
 import { Separator } from "@/components/ui/separator";
 import { timeAgo } from "@/lib/time";
 import { PostMenu } from "./post-menu";
@@ -54,6 +54,7 @@ export default function PostCard({ post }: { post: Post }) {
               <span>@{post.author.user.username}</span>
               <span className="mx-2">&bull;</span>
               {timeAgo(post.created_at)}
+              {post.edited && <span className="ml-1">(edited)</span>}
             </CardDescription>
           </div>
         </div>

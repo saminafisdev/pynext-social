@@ -1,9 +1,9 @@
 import api from "@/api/apiClient";
 import { useQuery } from "@tanstack/react-query";
 import PostCard from "./components/post-card";
-import type { Post } from "@/features/posts/types/post";
+import type { Post } from "@/pages/posts/types/post";
 
-export default function PostsHome() {
+export default function Page() {
   const {
     data: posts,
     isError,

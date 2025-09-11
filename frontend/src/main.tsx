@@ -3,10 +3,10 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import "./index.css";
 import RootLayout from "./components/layout/RootLayout.tsx";
-import LoginPage from "./pages/Login.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ProfilePage from "./pages/Profile.tsx";
-import PostsHome from "./features/posts/index.tsx";
+import LoginPage from "./pages/login.tsx";
+import ProfilePage from "./pages/profile.tsx";
+import PostsHome from "@/pages/posts/index.tsx";
 
 const queryClient = new QueryClient();
 

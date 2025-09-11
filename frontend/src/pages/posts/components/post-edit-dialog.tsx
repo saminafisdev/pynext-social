@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import type { Post } from "@/features/posts/types/post";
+import type { Post } from "@/pages/posts/types/post";
 
 export function PostEditDialog({
   post,
@@ -25,30 +25,28 @@ export function PostEditDialog({
 }) {
   const queryClient = useQueryClient();
   const [postContent, setPostContent] = useState(post.content);
+
   const { mutate: editPostMutate, isPending } = useMutation({
-    mutationFn: handleEditPost,
+    mutationFn: async ({ id, content }: { id: number; content: string }) => {
+      const { data } = await api.put(`posts/${id}/`, { content });
+      return data;
+    },
     onSuccess: () => {
       setIsEditOpen(false);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 
-  async function handleEditPost() {
-    const { data } = await api.put(`/posts/${post.id}/`, {
-      content: postContent,
-    });
-    return data;
-  }
   return (
     <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-      <form
-        id="editPostForm"
-        onSubmit={(e) => {
-          e.preventDefault();
-          editPostMutate();
-        }}
-      >
-        <DialogContent className="sm:max-w-[650px]">
+      <DialogContent className="sm:max-w-[650px]">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            editPostMutate({ id: post.id, content: postContent });
+          }}
+          className="space-y-4"
+        >
           <DialogHeader>
             <DialogTitle>Edit post</DialogTitle>
           </DialogHeader>
@@ -63,13 +61,13 @@ export function PostEditDialog({
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" form="editPostForm" disabled={isPending}>
+            <Button type="submit" disabled={isPending}>
               {isPending && <Loader2 className="animate-spin" />}
               Save changes
             </Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

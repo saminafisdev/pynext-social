@@ -11,13 +11,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 import { useLogin } from "@/hooks/useLogin";
-import { redirect } from "react-router";
+import { useNavigate } from "react-router";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const login = useLogin();
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -26,7 +27,7 @@ export function LoginForm({
     login.mutate(
       { username, password },
       {
-        onSuccess: () => redirect("/"),
+        onSuccess: () => navigate("/"),
         onError: (err) => console.error("Login failed:", err),
       }
     );

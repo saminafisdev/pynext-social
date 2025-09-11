@@ -44,6 +44,7 @@ class PostSerializer(serializers.ModelSerializer):
             "has_liked",
             "likes_count",
             "is_owner",
+            "edited",
             "comments_count",
             "created_at",
             "updated_at",

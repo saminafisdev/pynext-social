@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 from django.conf import settings
 
@@ -12,6 +13,12 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    edited = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            self.edited = True
+        return super().save(*args, **kwargs)
 
 
 class Comment(models.Model):

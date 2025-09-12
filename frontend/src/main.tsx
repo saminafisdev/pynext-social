@@ -17,9 +17,9 @@ createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route element={<RootLayout />}>
             <Route index element={<PostsHome />} />
-            <Route path="login" element={<LoginPage />} />
             <Route path="profile" element={<ProfilePage />} />
           </Route>
+          <Route path="login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

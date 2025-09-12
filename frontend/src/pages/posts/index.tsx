@@ -1,7 +1,8 @@
 import api from "@/api/apiClient";
 import { useQuery } from "@tanstack/react-query";
-import PostCard from "./components/post-card";
+import PostCard from "@/pages/posts/components/post-card";
 import type { Post } from "@/pages/posts/types/post";
+import PostComposeCard from "./components/post-compose-card";
 
 export default function Page() {
   const {
@@ -18,10 +19,12 @@ export default function Page() {
 
   return (
     <div>
-      <h1>Your Feed</h1>
-      {posts.map((post: Post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
+      <PostComposeCard />
+      <div className="space-y-4">
+        {posts.map((post: Post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
     </div>
   );
 }

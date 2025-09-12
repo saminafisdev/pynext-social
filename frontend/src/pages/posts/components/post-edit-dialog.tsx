@@ -33,6 +33,7 @@ export function PostEditDialog({
     },
     onSuccess: () => {
       setIsEditOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["post", String(post.id)] });
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });

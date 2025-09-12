@@ -18,7 +18,7 @@ createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route element={<RootLayout />}>
             <Route index element={<PostsHome />} />
-            <Route path=":username/posts/:id" element={<PostDetail />} />
+            <Route path=":username/posts/:postId" element={<PostDetail />} />
             <Route path="profile" element={<ProfilePage />} />
           </Route>
           <Route path="login" element={<LoginPage />} />

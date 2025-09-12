@@ -7,18 +7,18 @@ import CommentCard from "@/components/comment-card";
 import CommentComposerCard from "@/components/comment-composer-card";
 
 export default function PostDetail() {
-  const { id } = useParams();
+  const { postId } = useParams();
   const { data: post, isPending } = useQuery({
-    queryKey: ["post"],
+    queryKey: ["post", postId],
     queryFn: async () => {
-      const { data } = await api.get(`posts/${id}`);
+      const { data } = await api.get(`posts/${postId}`);
       return data;
     },
   });
   const { data: comments, isPending: isCommentsPending } = useQuery({
     queryKey: ["comments"],
     queryFn: async () => {
-      const { data } = await api.get(`posts/${id}/comments/`);
+      const { data } = await api.get(`posts/${postId}/comments/`);
       return data;
     },
   });
@@ -35,7 +35,7 @@ export default function PostDetail() {
   return (
     <div>
       <PostCard post={post} />
-      <CommentComposerCard post_id={id} />
+      <CommentComposerCard post_id={postId} />
       {commentsRender}
     </div>
   );

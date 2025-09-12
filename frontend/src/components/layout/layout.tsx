@@ -6,10 +6,10 @@ export default function RootLayout() {
   return (
     <>
       <SidebarProvider>
-        <div className="flex h-screen">
-          <AppSidebar />
+        <AppSidebar />
+        <main>
           <Outlet />
-        </div>
+        </main>
       </SidebarProvider>
     </>
   );

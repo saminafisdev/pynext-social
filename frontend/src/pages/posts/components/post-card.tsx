@@ -16,6 +16,7 @@ import { timeAgo } from "@/lib/time";
 import { PostMenu } from "./post-menu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/apiClient";
+import { NavLink } from "react-router";
 
 export default function PostCard({ post }: { post: Post }) {
   const queryClient = useQueryClient();
@@ -53,7 +54,9 @@ export default function PostCard({ post }: { post: Post }) {
             <CardDescription>
               <span>@{post.author.user.username}</span>
               <span className="mx-2">&bull;</span>
-              {timeAgo(post.created_at)}
+              <NavLink to={`/@${post.author.user.username}/posts/${post.id}`}>
+                {timeAgo(post.created_at)}
+              </NavLink>
               {post.edited && <span className="ml-1">(edited)</span>}
             </CardDescription>
           </div>
@@ -65,7 +68,7 @@ export default function PostCard({ post }: { post: Post }) {
         )}
       </CardHeader>
       <CardContent>
-        <p>{post.content}</p>
+        <p className="break-words">{post.content}</p>
       </CardContent>
       <Separator />
       <CardFooter>

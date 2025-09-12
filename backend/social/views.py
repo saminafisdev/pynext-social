@@ -32,8 +32,8 @@ class PostViewSet(viewsets.ModelViewSet):
         )
         return (
             Post.objects.annotate(
-                likes_count=Count("likes"),
-                comments_count=Count("comments"),
+                likes_count=Count("likes", distinct=True),
+                comments_count=Count("comments", distinct=True),
                 has_liked=Exists(qs),
             )
             .select_related("author__user")

@@ -28,6 +28,9 @@ export default function PostCard({ post }: { post: Post }) {
       queryClient.invalidateQueries({
         queryKey: ["posts"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["post", String(post.id)],
+      });
     },
   });
 

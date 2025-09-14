@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonGroup,
   Circle,
   Container,
   Float,
@@ -29,9 +30,16 @@ import ThemeSwitch from "../themeSwitch";
 
 export default function RootLayout() {
   return (
-    <Container maxW={"6xl"}>
+    <Container maxW={"7xl"}>
       <HStack alignItems={"start"} gap={"6"}>
-        <VStack alignItems={"start"} position={"sticky"} top={0} gap={0} h="vh">
+        <VStack
+          alignItems={"start"}
+          position={"sticky"}
+          top={0}
+          gap={0}
+          h="vh"
+          w={"2xs"}
+        >
           <Icon size={"2xl"} color={"yellow.500"} mx="auto" my={4}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
@@ -44,7 +52,13 @@ export default function RootLayout() {
               ></path>
             </svg>
           </Icon>
-          <VStack flexGrow={1} alignItems={"start"} gap={0}>
+          <ButtonGroup
+            flexGrow={1}
+            flexDirection={"column"}
+            alignItems={"start"}
+            gap={0}
+            width="full"
+          >
             <Button variant={"ghost"} size={"2xl"} asChild>
               <Link to={"/"}>
                 <Home />
@@ -76,7 +90,7 @@ export default function RootLayout() {
               <Settings />
               Settings
             </Button>
-          </VStack>
+          </ButtonGroup>
           <Box w="full">
             <Menu.Root closeOnSelect={false}>
               <Menu.Trigger w="full">

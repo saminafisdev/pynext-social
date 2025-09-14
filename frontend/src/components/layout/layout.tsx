@@ -22,6 +22,7 @@ import {
   Search,
   Settings,
   User2,
+  UsersRound,
 } from "lucide-react";
 import { Link, Outlet } from "react-router";
 import ThemeSwitch from "../themeSwitch";
@@ -43,7 +44,7 @@ export default function RootLayout() {
               ></path>
             </svg>
           </Icon>
-          <VStack flexGrow={1} alignItems={"start"}>
+          <VStack flexGrow={1} alignItems={"start"} gap={0}>
             <Button variant={"ghost"} size={"2xl"} asChild>
               <Link to={"/"}>
                 <Home />
@@ -60,12 +61,16 @@ export default function RootLayout() {
               </Float>
             </Button>
             <Button variant={"ghost"} size={"2xl"}>
-              <User2 />
+              <UsersRound />
               Friends
             </Button>
             <Button variant={"ghost"} size={"2xl"}>
               <Bookmark />
               Bookmarks
+            </Button>
+            <Button variant={"ghost"} size={"2xl"}>
+              <User2 />
+              Profile
             </Button>
             <Button variant={"ghost"} size={"2xl"}>
               <Settings />
@@ -123,7 +128,7 @@ export default function RootLayout() {
         <VStack alignItems={"start"} position={"sticky"} top={"24px"} gap={0}>
           <InputGroup startElement={<Search />}>
             <Input
-              placeholder="Search Gull"
+              placeholder="Search"
               variant={"subtle"}
               borderRadius={"full"}
               size={"lg"}

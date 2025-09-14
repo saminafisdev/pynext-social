@@ -10,7 +10,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/apiClient";
 import { Loader2 } from "lucide-react";
@@ -54,7 +54,9 @@ export function PostCreateDialog() {
             <Textarea
               value={postContent}
               className="h-48 md:text-lg"
-              onChange={(e) => setPostContent(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setPostContent(e.target.value)
+              }
             />
           </div>
           <DialogFooter>

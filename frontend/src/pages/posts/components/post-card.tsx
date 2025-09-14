@@ -1,24 +1,23 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageCircle, ThumbsUp } from "lucide-react";
+import { Bookmark, Heart } from "lucide-react";
 import type { Post } from "@/pages/posts/types/post";
-import { Separator } from "@/components/ui/separator";
 import { timeAgo } from "@/lib/time";
-import { PostMenu } from "./post-menu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/apiClient";
-import { NavLink } from "react-router";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  HStack,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router";
+import PostCommentDialog from "@/components/post-comment-dialog";
+import { PostMenu } from "./post-menu";
 
 export default function PostCard({ post }: { post: Post }) {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user } = post.author;
 
@@ -40,52 +39,48 @@ export default function PostCard({ post }: { post: Post }) {
   }
 
   return (
-    <Card className="w-full max-w-xl">
-      <CardHeader>
-        <div className="flex items-center gap-x-2">
-          <Avatar className="size-10">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>
-              {user.full_name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <CardTitle>{post.author.user.full_name}</CardTitle>
-            <CardDescription>
-              <span>@{post.author.user.username}</span>
-              <span className="mx-2">&bull;</span>
-              <NavLink to={`/@${post.author.user.username}/posts/${post.id}`}>
-                {timeAgo(post.created_at)}
-              </NavLink>
-              {post.edited && <span className="ml-1">(edited)</span>}
-            </CardDescription>
-          </div>
-        </div>
-        {post.is_owner && (
-          <CardAction>
-            <PostMenu post={post} />
-          </CardAction>
-        )}
-      </CardHeader>
-      <CardContent>
-        <p className="break-words">{post.content}</p>
-      </CardContent>
-      <Separator />
-      <CardFooter>
+    <Card.Root borderRadius={"none"}>
+      <Card.Header>
+        <HStack>
+          <Avatar.Root>
+            <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
+            <Avatar.Fallback name={user.full_name} />
+          </Avatar.Root>
+          <Stack gap={0}>
+            <Text fontWeight={"semibold"} textStyle={"sm"}>
+              {user.full_name}
+            </Text>
+            <Text color={"fg.muted"} textStyle={"sm"}>
+              @{user.username} &bull; {timeAgo(post.created_at)}
+            </Text>
+          </Stack>
+          {post.is_owner && (
+            <Box marginLeft={"auto"}>
+              <PostMenu post={post} />
+            </Box>
+          )}
+        </HStack>
+      </Card.Header>
+      <Card.Body
+        onClick={() =>
+          navigate(`/@${user.username}/posts/${post.id}`, {
+            viewTransition: true,
+          })
+        }
+        cursor={"pointer"}
+      >
+        <Text whiteSpace={"pre-wrap"}>{post.content}</Text>
+      </Card.Body>
+      <Card.Footer>
         <Button variant={"ghost"} onClick={() => mutate()}>
-          <ThumbsUp
-            className={post.has_liked ? "fill-blue-500 text-blue-700" : ""}
-          />
-          <span>{post.likes_count}</span>
+          {post.has_liked ? <Heart color="red" fill="red" /> : <Heart />}
+          {post.likes_count}
         </Button>
+        <PostCommentDialog post={post} />
         <Button variant={"ghost"}>
-          <MessageCircle />
-          <span>{post.comments_count}</span>
+          <Bookmark />
         </Button>
-      </CardFooter>
-    </Card>
+      </Card.Footer>
+    </Card.Root>
   );
 }

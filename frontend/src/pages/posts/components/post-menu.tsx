@@ -1,36 +1,26 @@
 import api from "@/api/apiClient";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Ellipsis, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
 import type { Post } from "@/pages/posts/types/post";
-import { PostEditDialog } from "./post-edit-dialog";
+import {
+  Button,
+  CloseButton,
+  Dialog,
+  IconButton,
+  Menu,
+  Portal,
+} from "@chakra-ui/react";
+import { Ellipsis } from "lucide-react";
+import { useNavigate } from "react-router";
 
 export function PostMenu({ post }: { post: Post }) {
   const queryClient = useQueryClient();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  const navigate = useNavigate();
 
   const { mutate: deletePostMutataion } = useMutation({
     mutationFn: handleDeletePost,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      navigate("/", { replace: true });
     },
   });
 
@@ -40,52 +30,55 @@ export function PostMenu({ post }: { post: Post }) {
   }
 
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"}>
-            <Ellipsis />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onSelect={() => setIsEditOpen(true)}>
-            <Pencil />
-            <span>Edit Post</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setIsDialogOpen(true)}>
-            <Trash2 className="text-red-500" />
-            Delete Post
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you sure you want to delete this post?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-red-800 hover:bg-red-700"
-              onClick={() => deletePostMutataion()}
-            >
-              <Trash2 />
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      <PostEditDialog
-        post={post}
-        isEditOpen={isEditOpen}
-        setIsEditOpen={setIsEditOpen}
-      />
-    </>
+    <Menu.Root closeOnSelect={false}>
+      <Menu.Trigger asChild>
+        <IconButton size={"sm"} variant={"ghost"}>
+          <Ellipsis />
+        </IconButton>
+      </Menu.Trigger>
+      <Menu.Positioner>
+        <Menu.Content>
+          <Menu.Item value="edit">Edit post</Menu.Item>
+          <Menu.Item
+            value="delete"
+            color="fg.error"
+            _hover={{ bg: "bg.error", color: "fg.error" }}
+          >
+            <Dialog.Root role="alertdialog">
+              <Dialog.Trigger w="full" textAlign={"left"}>
+                Delete post
+              </Dialog.Trigger>
+              <Portal>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                  <Dialog.Content>
+                    <Dialog.Header>
+                      <Dialog.Title>Are you sure?</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Body>
+                      <p>This action cannot be undone.</p>
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                      <Dialog.ActionTrigger asChild>
+                        <Button variant="outline">Cancel</Button>
+                      </Dialog.ActionTrigger>
+                      <Button
+                        colorPalette="red"
+                        onClick={() => deletePostMutataion()}
+                      >
+                        Delete
+                      </Button>
+                    </Dialog.Footer>
+                    <Dialog.CloseTrigger asChild>
+                      <CloseButton size="sm" />
+                    </Dialog.CloseTrigger>
+                  </Dialog.Content>
+                </Dialog.Positioner>
+              </Portal>
+            </Dialog.Root>
+          </Menu.Item>
+        </Menu.Content>
+      </Menu.Positioner>
+    </Menu.Root>
   );
 }

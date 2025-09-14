@@ -1,10 +1,8 @@
-import { Loader2, SendHorizonal } from "lucide-react";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardFooter } from "./ui/card";
-import { Textarea } from "./ui/textarea";
+import { ImagePlus, SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/apiClient";
+import { Box, ButtonGroup, IconButton, Textarea } from "@chakra-ui/react";
 
 export default function CommentComposerCard({
   post_id,
@@ -23,33 +21,46 @@ export default function CommentComposerCard({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments"] });
+      queryClient.invalidateQueries({ queryKey: ["post", String(post_id)] });
       setCommentContent("");
     },
   });
 
   return (
-    <Card className="border-none shadow-none rounded-none">
+    <Box bg={"bg.muted"}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           mutate();
         }}
       >
-        <CardContent>
-          <Textarea
-            placeholder="Comment on this post"
-            className="md:text-lg placeholder:text-xl py-8 rounded-none"
-            value={commentContent}
-            onChange={(e) => setCommentContent(e.target.value)}
-          />
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant={"ghost"}>GIF</Button>
-          <Button variant={"ghost"} disabled={isPending}>
-            {isPending ? <Loader2 /> : <SendHorizonal />}
-          </Button>
-        </CardFooter>
+        <Textarea
+          bgColor={"bg.muted"}
+          placeholder="Reply to this post"
+          resize={"none"}
+          autoresize
+          maxH={"10lh"}
+          outline={"none"}
+          border={"none"}
+          size={"lg"}
+          value={commentContent}
+          onChange={(e) => setCommentContent(e.target.value)}
+        />
+        <ButtonGroup size={"sm"} width="full" px={2}>
+          <IconButton variant={"subtle"}>
+            <ImagePlus />
+          </IconButton>
+          <IconButton
+            variant={"subtle"}
+            ml={"auto"}
+            loading={isPending}
+            color={"blue.500"}
+            type="submit"
+          >
+            <SendHorizonal />
+          </IconButton>
+        </ButtonGroup>
       </form>
-    </Card>
+    </Box>
   );
 }

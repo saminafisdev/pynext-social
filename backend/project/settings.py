@@ -169,7 +169,8 @@ DJOSER = {
     "SERIALIZERS": {
         "current_user": "core.serializers.CustomUserSerializer",
         "user": "core.serializers.CustomUserSerializer",
-    }
+    },
+    "USER_CREATE_PASSWORD_RETYPE": True,
 }
 
 AUTH_COOKIE = "access"

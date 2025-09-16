@@ -4,17 +4,26 @@ import LoginPage from "./pages/login.tsx";
 import ProfilePage from "./pages/profile.tsx";
 import PostsHome from "@/pages/posts/index.tsx";
 import PostDetail from "./pages/posts/post-detail.tsx";
+import SignupPage from "./pages/signup.tsx";
+import LoadingRoute from "./pages/startup-loading.tsx";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<RootLayout />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignupPage />} />
+        <Route
+          element={
+            <LoadingRoute>
+              <RootLayout />
+            </LoadingRoute>
+          }
+        >
           <Route index element={<PostsHome />} />
           <Route path=":username/posts/:postId" element={<PostDetail />} />
           <Route path="profile" element={<ProfilePage />} />
         </Route>
-        <Route path="login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );

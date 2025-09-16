@@ -18,15 +18,32 @@ import {
   Bookmark,
   ChevronsUpDown,
   Home,
-  LogOut,
   MessageCircle,
   Search,
   Settings,
   User2,
   UsersRound,
 } from "lucide-react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useMatch } from "react-router";
 import ThemeSwitch from "../themeSwitch";
+import LogoutButton from "../logout-button";
+
+export function NavItem({
+  to,
+  children,
+}: {
+  to: string;
+  children: React.ReactNode;
+}) {
+  const match = useMatch({ path: to, end: to === "/" }); // end:true for exact
+  const isActive = Boolean(match);
+
+  return (
+    <Button fontWeight={isActive ? "extrabold" : "normal"} asChild>
+      <Link to={to}>{children}</Link>
+    </Button>
+  );
+}
 
 export default function RootLayout() {
   return (
@@ -58,13 +75,13 @@ export default function RootLayout() {
             alignItems={"start"}
             gap={0}
             width="full"
+            variant={"ghost"}
+            size={"2xl"}
           >
-            <Button variant={"ghost"} size={"2xl"} asChild>
-              <Link to={"/"}>
-                <Home />
-                Home
-              </Link>
-            </Button>
+            <NavItem to="/">
+              <Home />
+              Home
+            </NavItem>
             <Button variant={"ghost"} size={"2xl"} position={"relative"}>
               <MessageCircle />
               Messages
@@ -74,10 +91,10 @@ export default function RootLayout() {
                 </Circle>
               </Float>
             </Button>
-            <Button variant={"ghost"} size={"2xl"}>
+            <NavItem to="/friends">
               <UsersRound />
               Friends
-            </Button>
+            </NavItem>
             <Button variant={"ghost"} size={"2xl"}>
               <Bookmark />
               Bookmarks
@@ -126,9 +143,8 @@ export default function RootLayout() {
                   <Menu.Separator />
                   <Menu.Arrow />
                   <Menu.ItemGroup>
-                    <Menu.Item value="logout">
-                      <LogOut />
-                      Sign out
+                    <Menu.Item value="logout" asChild>
+                      <LogoutButton />
                     </Menu.Item>
                   </Menu.ItemGroup>
                 </Menu.Content>

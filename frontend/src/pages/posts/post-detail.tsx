@@ -1,10 +1,12 @@
 import api from "@/api/apiClient";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import PostCard from "./components/post-card";
 import CommentComposerCard from "@/components/comment-composer-card";
 import PostLoadingSkeleton from "./components/post-loading-skeleton";
 import PostComments from "./components/post-comments";
+import { Box, HStack, IconButton, Text } from "@chakra-ui/react";
+import { ArrowLeft } from "lucide-react";
 
 export default function PostDetail() {
   const { postId } = useParams();
@@ -19,10 +21,18 @@ export default function PostDetail() {
   if (isPending) return <PostLoadingSkeleton />;
 
   return (
-    <div>
+    <Box>
+      <HStack bg={"bg.subtle"} alignItems={"center"} p={4}>
+        <IconButton variant={"ghost"} asChild>
+          <Link to={"/"}>
+            <ArrowLeft />
+          </Link>
+        </IconButton>
+        <Text fontSize={"lg"}>Post</Text>
+      </HStack>
       <PostCard post={post} />
       <CommentComposerCard post_id={postId} />
       <PostComments postId={Number(postId)} />
-    </div>
+    </Box>
   );
 }

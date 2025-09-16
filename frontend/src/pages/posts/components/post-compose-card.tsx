@@ -8,6 +8,7 @@ import {
   HStack,
   IconButton,
   Input,
+  SkeletonCircle,
   Stack,
   Text,
   Textarea,
@@ -19,7 +20,7 @@ import { useRef, useState } from "react";
 export default function PostCompose() {
   const queryClient = useQueryClient();
   const ref = useRef<HTMLTextAreaElement | null>(null);
-  const { data: user } = useUser();
+  const { data: user, isLoading } = useUser();
 
   const [postConent, setPostContent] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -36,6 +37,23 @@ export default function PostCompose() {
   });
 
   if (isError) return <Text>There was an error</Text>;
+  if (isLoading)
+    return (
+      <Card.Root>
+        <Card.Body>
+          <HStack>
+            <SkeletonCircle size={10} />
+            <Input
+              variant={"flushed"}
+              placeholder="Post on Gull"
+              textStyle={"2xl"}
+              pb={2}
+              readOnly
+            />
+          </HStack>
+        </Card.Body>
+      </Card.Root>
+    );
 
   return (
     <Card.Root>
@@ -43,7 +61,7 @@ export default function PostCompose() {
         <HStack>
           <Avatar.Root>
             <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
-            <Avatar.Fallback name={user?.full_name} />
+            <Avatar.Fallback name={user.full_name} />
           </Avatar.Root>
           <Dialog.Root
             size={"lg"}

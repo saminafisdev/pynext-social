@@ -167,8 +167,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 DJOSER = {
     "SERIALIZERS": {
-        "current_user": "core.serializers.CustomUserSerializer",
-        "user": "core.serializers.CustomUserSerializer",
+        "user_create_password_retype": "core.serializers.UserCreateSerializer",
+        "current_user": "core.serializers.UserSerializer",
+        "user": "core.serializers.UserSerializer",
     },
     "USER_CREATE_PASSWORD_RETYPE": True,
 }

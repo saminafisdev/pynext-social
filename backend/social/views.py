@@ -3,10 +3,24 @@ from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import generics
 
-from .permissions import IsAuthorOrReadOnly, IsPostLikeOwner
-from .models import Comment, PostLike, Post
-from .serializers import CommentSerializer, LikeSerializer, PostSerializer
+from .permissions import IsAuthorOrReadOnly, IsPostLikeOwner, IsProfileOwnerOrReadOnly
+from .models import Comment, PostLike, Post, Profile
+from .serializers import (
+    CommentSerializer,
+    LikeSerializer,
+    PostSerializer,
+    ProfileSerializer,
+)
+
+
+class ProfileAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.select_related("user").all()
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated, IsProfileOwnerOrReadOnly]
+    lookup_field = "user__username"
+    lookup_url_kwarg = "username"
 
 
 class PostViewSet(viewsets.ModelViewSet):

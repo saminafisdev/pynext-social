@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework_nested import routers
 
-from .views import CommentViewSet, PostLikeViewSet, PostViewSet
+from .views import CommentViewSet, PostLikeViewSet, PostViewSet, ProfileAPIView
 
 router = routers.SimpleRouter()
 router.register(r"posts", PostViewSet, basename="post")
@@ -13,4 +13,5 @@ posts_router.register(r"likes", PostLikeViewSet, basename="like")
 urlpatterns = [
     path("", include(router.urls)),
     path("", include(posts_router.urls)),
+    path("profile/<str:username>/", ProfileAPIView.as_view(), name="profile"),
 ]

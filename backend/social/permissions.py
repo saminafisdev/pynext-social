@@ -1,6 +1,13 @@
 from rest_framework import permissions
 
 
+class IsProfileOwnerOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.user == request.user
+
+
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow authors of a post to edit or delete it.

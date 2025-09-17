@@ -41,7 +41,6 @@ export default function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: async (loginFields: LoginInput) => {
-      console.log(loginFields);
       const { data } = await api.post("auth/jwt/create/", loginFields);
       return data;
     },

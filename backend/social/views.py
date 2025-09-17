@@ -1,9 +1,12 @@
 from django.db.models import Count, Exists, OuterRef
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import generics
+
+from .filters import PostFilter
 
 from .permissions import IsAuthorOrReadOnly, IsPostLikeOwner, IsProfileOwnerOrReadOnly
 from .models import Comment, PostLike, Post, Profile
@@ -26,6 +29,8 @@ class ProfileAPIView(generics.RetrieveUpdateAPIView):
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PostFilter
 
     @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated])
     def toggle_like(self, request, pk=None):

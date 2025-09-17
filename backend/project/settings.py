@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "debug_toolbar",
     "djoser",
+    "django_filters",
     "rest_framework",
     # apps
     "core",

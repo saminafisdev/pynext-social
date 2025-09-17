@@ -7,10 +7,16 @@ from .models import Post, Profile, PostLike, Comment
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    is_owner = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ("id", "user", "bio")
+        fields = ("id", "user", "bio", "is_owner")
+
+    def get_is_owner(self, obj):
+        request = self.context.get("request", None)
+        user = getattr(request, "user", None)
+        return bool(user and user.is_authenticated and obj.user == user)
 
 
 class LikeSerializer(serializers.ModelSerializer):

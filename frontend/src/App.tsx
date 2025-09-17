@@ -22,7 +22,7 @@ function App() {
         >
           <Route index element={<PostsHome />} />
           <Route path=":username/posts/:postId" element={<PostDetail />} />
-          <Route path="profile" element={<ProfilePage />} />
+          <Route path="/u/:username" element={<ProfilePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

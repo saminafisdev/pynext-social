@@ -27,6 +27,7 @@ import {
 import { Link, Outlet, useMatch } from "react-router";
 import ThemeSwitch from "../themeSwitch";
 import LogoutButton from "../logout-button";
+import { useUser } from "@/hooks/use-user";
 
 export function NavItem({
   to,
@@ -46,6 +47,7 @@ export function NavItem({
 }
 
 export default function RootLayout() {
+  const { data: user } = useUser();
   return (
     <Container maxW={"7xl"}>
       <HStack alignItems={"start"} gap={"6"}>
@@ -99,9 +101,11 @@ export default function RootLayout() {
               <Bookmark />
               Bookmarks
             </Button>
-            <Button variant={"ghost"} size={"2xl"}>
-              <User2 />
-              Profile
+            <Button variant={"ghost"} size={"2xl"} asChild>
+              <NavItem to={`/u/${user.username}`}>
+                <User2 />
+                Profile
+              </NavItem>
             </Button>
             <Button variant={"ghost"} size={"2xl"}>
               <Settings />

@@ -121,9 +121,9 @@ export default function RootLayout() {
                     <Avatar.Fallback name="Nate Foss" />
                   </Avatar.Root>
                   <VStack gap={0}>
-                    <Text textStyle={"sm"}>John Doe</Text>
+                    <Text textStyle={"sm"}>{user.full_name}</Text>
                     <Text textStyle={"sm"} color={"fg.muted"}>
-                      @john.doe
+                      @{user.username}
                     </Text>
                   </VStack>
                   <ChevronsUpDown />
@@ -133,8 +133,8 @@ export default function RootLayout() {
                 <Menu.Content>
                   <Menu.ItemGroup>
                     <Menu.Item value="user">
-                      <Text>John Doe</Text>
-                      <Text>@john.doe</Text>
+                      <Text>{user.full_name}</Text>
+                      <Text>@{user.username}</Text>
                     </Menu.Item>
                   </Menu.ItemGroup>
                   <Menu.Separator />

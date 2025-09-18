@@ -15,6 +15,7 @@ import { CalendarDays } from "lucide-react";
 import ProfileEditDialog from "./profile/components/profile-edit-dialog";
 import ProfilePosts from "./profile/components/profile-posts";
 import ProfileLoadingSkeleton from "./profile/components/profile-loading-skeleton";
+import { format, parseISO } from "date-fns";
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -61,7 +62,9 @@ export default function ProfilePage() {
       <Text>{profile.bio}</Text>
       <HStack color={"fg.muted"} textStyle={"md"} alignItems={"center"}>
         <CalendarDays size={16} />
-        <Text>Joined June 2023</Text>
+        <Text>
+          Joined {format(parseISO(profile.user.date_joined), "LLLL yyyy")}
+        </Text>
       </HStack>
       <Tabs.Root defaultValue={"posts"} mt={6}>
         <Tabs.List>

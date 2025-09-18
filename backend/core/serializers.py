@@ -29,4 +29,5 @@ class UserSerializer(BaseUserSerializer):
             "full_name",
             "username",
             "email",
+            "date_joined",
         ]

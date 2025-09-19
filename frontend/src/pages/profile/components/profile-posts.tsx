@@ -28,6 +28,14 @@ export default function ProfilePosts({ profile }: { profile: Profile }) {
       </Box>
     );
 
+  if (posts.length === 0) {
+    return (
+      <Box>
+        <Text>No posts available.</Text>
+      </Box>
+    );
+  }
+
   return (
     <Box>
       {posts?.map((post: Post) => (

@@ -1,3 +1,5 @@
+import type { Profile } from "@/pages/profile/types/profile";
+
 export interface Post {
   id: number;
   content: string;
@@ -8,16 +10,5 @@ export interface Post {
   edited: boolean;
   created_at: Date;
   updated_at: Date;
-  author: {
-    id: number;
-    bio?: string;
-    user: {
-      id: number;
-      first_name: string;
-      last_name: string;
-      full_name: string;
-      username: string;
-      email: string;
-    };
-  };
+  author: Profile;
 }

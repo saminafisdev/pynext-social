@@ -13,4 +13,5 @@ export interface Profile {
   user: User;
   bio: string;
   is_owner: boolean;
+  profile_picture: string;
 }

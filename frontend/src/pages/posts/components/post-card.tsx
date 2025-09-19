@@ -43,7 +43,7 @@ export default function PostCard({ post }: { post: Post }) {
       <Card.Header>
         <HStack>
           <Avatar.Root>
-            <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
+            <Avatar.Image src={post.author.profile_picture} />
             <Avatar.Fallback name={user.full_name} />
           </Avatar.Root>
           <Stack gap={0}>

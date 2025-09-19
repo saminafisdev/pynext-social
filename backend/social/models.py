@@ -12,6 +12,11 @@ class Profile(models.Model):
         null=True,
         default="profile_pics/default.jpg",
     )
+    cover_photo = models.ImageField(
+        upload_to="cover_photo/",
+        blank=True,
+        null=True,
+    )
 
 
 class Post(models.Model):

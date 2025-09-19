@@ -1,8 +1,7 @@
 import type { Comment } from "@/pages/posts/types/comment";
 import { timeAgo } from "@/lib/time";
-import { Heart, MessageCircle } from "lucide-react";
+import { HatGlasses, Heart, MessageCircle } from "lucide-react";
 import {
-  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -11,6 +10,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { Avatar } from "./ui/avatar";
 
 interface CommentCardProps {
   comment: Comment;
@@ -23,10 +23,11 @@ export default function CommentCard({ comment }: CommentCardProps) {
     <Card.Root size={"sm"} borderRadius={"none"}>
       <Card.Header>
         <HStack>
-          <Avatar.Root size={"sm"}>
-            <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
-            <Avatar.Fallback name={user.full_name} />
-          </Avatar.Root>
+          <Avatar
+            src={author.profile_picture}
+            size={"sm"}
+            fallback={<HatGlasses />}
+          />
           <Stack gap={0}>
             <Text fontWeight={"semibold"} textStyle={"sm"}>
               {user.full_name}

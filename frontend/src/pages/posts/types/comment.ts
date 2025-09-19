@@ -1,17 +1,8 @@
+import type { Profile } from "@/pages/profile/types/profile";
+
 export type Comment = {
   id: number;
-  author: {
-    id: number;
-    user: {
-      id: number;
-      first_name: string;
-      last_name: string;
-      full_name: string;
-      username: string;
-      email: string;
-    };
-    bio: string;
-  };
+  author: Profile;
   content: string;
   created_at: string;
   updated_at: string;

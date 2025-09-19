@@ -1,7 +1,6 @@
 import type { Post } from "@/pages/posts/types/post";
 import { timeAgo } from "@/lib/time";
 import {
-  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -14,15 +13,53 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { ImagePlus, MessageCircle, SendHorizonal } from "lucide-react";
+import { useRef, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/api/apiClient";
+import { Avatar } from "@/components/ui/avatar";
+import { useUser } from "@/hooks/use-user";
 
 interface PostCommentDialogProps {
   post: Post;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-export default function PostCommentDialog({ post }: PostCommentDialogProps) {
+export default function PostCommentDialog({
+  post,
+  open,
+  setOpen,
+}: PostCommentDialogProps) {
+  const [comment, setComment] = useState("");
   const { user } = post.author;
+  const { data: authProfile } = useUser();
+
+  const queryClient = useQueryClient();
+
+  const ref = useRef<HTMLTextAreaElement | null>(null);
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      const data = await api.post(`posts/${post.id}/comments/`, {
+        content: comment,
+      });
+      return data;
+    },
+    onSuccess: () => {
+      setComment("");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      setOpen(false);
+    },
+  });
+
   return (
-    <Dialog.Root scrollBehavior={"inside"} size={"lg"}>
+    <Dialog.Root
+      scrollBehavior={"inside"}
+      size={"lg"}
+      initialFocusEl={() => ref.current}
+      open={open}
+      onOpenChange={(details) => setOpen(details.open)}
+    >
       <Dialog.Trigger asChild>
         <Button variant={"ghost"}>
           <MessageCircle />
@@ -32,7 +69,7 @@ export default function PostCommentDialog({ post }: PostCommentDialogProps) {
       <Dialog.Backdrop />
       <Dialog.Positioner>
         <Dialog.Content>
-          <Dialog.CloseTrigger>
+          <Dialog.CloseTrigger asChild>
             <CloseButton />
           </Dialog.CloseTrigger>
           <Dialog.Header>
@@ -41,10 +78,10 @@ export default function PostCommentDialog({ post }: PostCommentDialogProps) {
           <Dialog.Body>
             <Stack gap={16}>
               <HStack gap={4} alignItems={"start"}>
-                <Avatar.Root>
-                  <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
-                  <Avatar.Fallback name={user.full_name} />
-                </Avatar.Root>
+                <Avatar
+                  src={post.author.profile_picture}
+                  fallback={user.full_name}
+                />
                 <Stack>
                   <Box>
                     <Text textStyle={"md"}>{user.full_name}</Text>
@@ -65,10 +102,10 @@ export default function PostCommentDialog({ post }: PostCommentDialogProps) {
           </Dialog.Body>
           <Dialog.Footer justifyContent={"start"} alignItems={"end"}>
             <HStack gap={4} alignItems={"start"} flexGrow={1}>
-              <Avatar.Root>
-                <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
-                <Avatar.Fallback name={user.full_name} />
-              </Avatar.Root>
+              <Avatar
+                src={authProfile?.profile_picture}
+                fallback={authProfile?.full_name}
+              />
               <Stack
                 flexGrow={1}
                 gap={0}
@@ -78,7 +115,7 @@ export default function PostCommentDialog({ post }: PostCommentDialogProps) {
                 _focusWithin={{ border: "1px solid ActiveBorder" }}
               >
                 <Textarea
-                  placeholder="Write your response"
+                  placeholder="Write a quick response"
                   variant={"subtle"}
                   textStyle={"xl"}
                   autoresize
@@ -86,13 +123,19 @@ export default function PostCommentDialog({ post }: PostCommentDialogProps) {
                   maxH={"10lh"}
                   border={"none"}
                   ring={"none"}
+                  ref={ref}
                   outline={"none"}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                 />
                 <ButtonGroup variant={"subtle"} size={"sm"}>
                   <IconButton>
                     <ImagePlus />
                   </IconButton>
-                  <IconButton>
+                  <IconButton
+                    disabled={!comment.trim()}
+                    onClick={() => mutate()}
+                  >
                     <SendHorizonal />
                   </IconButton>
                 </ButtonGroup>

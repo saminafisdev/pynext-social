@@ -15,11 +15,13 @@ import {
 import { useNavigate } from "react-router";
 import PostCommentDialog from "@/components/post-comment-dialog";
 import { PostMenu } from "./post-menu";
+import { useState } from "react";
 
 export default function PostCard({ post }: { post: Post }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user } = post.author;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { mutate } = useMutation({
     mutationFn: toggleLike,
@@ -76,7 +78,11 @@ export default function PostCard({ post }: { post: Post }) {
           {post.has_liked ? <Heart color="red" fill="red" /> : <Heart />}
           {post.likes_count}
         </Button>
-        <PostCommentDialog post={post} />
+        <PostCommentDialog
+          post={post}
+          open={isDialogOpen}
+          setOpen={setIsDialogOpen}
+        />
         <Button variant={"ghost"}>
           <Bookmark />
         </Button>

@@ -19,14 +19,15 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import api from "@/api/apiClient";
 import { Link, useNavigate } from "react-router";
+import axios from "axios";
 
 const signupSchema = z
   .object({
-    firstName: z
+    first_name: z
       .string()
       .min(1, "First name is required")
       .max(50, "First name must be 50 characters or fewer"),
-    lastName: z
+    last_name: z
       .string()
       .min(1, "Last name is required")
       .max(50, "Last name must be 50 characters or fewer"),
@@ -48,7 +49,7 @@ const signupSchema = z
     re_password: z.string(),
   })
   .refine((data) => data.password === data.re_password, {
-    path: ["confirmPassword"],
+    path: ["re_password"],
     message: "Passwords do not match",
   });
 
@@ -59,13 +60,14 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
     reset,
   } = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       username: "",
       password: "",
@@ -73,7 +75,7 @@ export default function LoginPage() {
     },
   });
 
-  const loginMutation = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async (registerFields: SignupForm) => {
       const { data } = await api.post("auth/users/", registerFields);
       return data;
@@ -82,11 +84,20 @@ export default function LoginPage() {
 
   const onSubmit = async (values: SignupForm) => {
     try {
-      await loginMutation.mutateAsync(values);
+      await mutateAsync(values);
       reset();
       navigate("/login");
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const resp = error?.response?.data;
+
+        if (resp) {
+          Object.entries(resp).forEach(([key, value]) => {
+            const msg = Array.isArray(value) ? String(value[0]) : String(value);
+            setError(key as keyof SignupForm, { type: "server", message: msg });
+          });
+        }
+      }
     }
   };
 
@@ -114,19 +125,19 @@ export default function LoginPage() {
 
           <Fieldset.Content>
             <HStack>
-              <Field.Root invalid={Boolean(errors.firstName)}>
+              <Field.Root invalid={Boolean(errors.first_name)}>
                 <Field.Label>First name</Field.Label>
-                <Input type="text" {...register("firstName")} />
-                {errors.firstName && (
-                  <Field.ErrorText>{errors.firstName.message}</Field.ErrorText>
+                <Input type="text" {...register("first_name")} />
+                {errors.first_name && (
+                  <Field.ErrorText>{errors.first_name.message}</Field.ErrorText>
                 )}
               </Field.Root>
 
-              <Field.Root invalid={Boolean(errors.lastName)}>
+              <Field.Root invalid={Boolean(errors.last_name)}>
                 <Field.Label>Last name</Field.Label>
-                <Input type="text" {...register("lastName")} />
-                {errors.lastName && (
-                  <Field.ErrorText>{errors.lastName.message}</Field.ErrorText>
+                <Input type="text" {...register("last_name")} />
+                {errors.last_name && (
+                  <Field.ErrorText>{errors.last_name.message}</Field.ErrorText>
                 )}
               </Field.Root>
             </HStack>
@@ -169,7 +180,7 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            loading={loginMutation.isPending}
+            loading={isPending}
             loadingText="Creating your account"
           >
             Create account

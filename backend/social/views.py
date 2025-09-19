@@ -4,7 +4,6 @@ from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import generics
 
 from .filters import PostFilter
 
@@ -18,12 +17,30 @@ from .serializers import (
 )
 
 
-class ProfileAPIView(generics.RetrieveUpdateAPIView):
+class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.select_related("user").all()
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated, IsProfileOwnerOrReadOnly]
-    lookup_field = "user__username"
+    lookup_field = "username"
     lookup_url_kwarg = "username"
+    lookup_value_regex = r"[\w.@+-]+"
+    http_method_names = ["get", "put", "patch", "head", "options"]
+
+    @action(
+        detail=False,
+        methods=["get"],
+        permission_classes=[IsAuthenticated],
+        url_path="current",
+    )
+    def me(self, request, pk=None):
+        print("Somethign")
+        profile = request.user.profile
+        serializer = self.get_serializer(profile)
+        return Response(serializer.data)
+
+    def get_object(self):
+        username = self.kwargs.get(self.lookup_url_kwarg or self.lookup_field)
+        return self.queryset.get(user__username=username)
 
 
 class PostViewSet(viewsets.ModelViewSet):

@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -28,6 +27,7 @@ import { Link, Outlet, useMatch } from "react-router";
 import ThemeSwitch from "../themeSwitch";
 import LogoutButton from "../logout-button";
 import { useUser } from "@/hooks/use-user";
+import { Avatar } from "../ui/avatar";
 
 export function NavItem({
   to,
@@ -47,7 +47,7 @@ export function NavItem({
 }
 
 export default function RootLayout() {
-  const { data: user } = useUser();
+  const { data: profile } = useUser();
   return (
     <Container maxW={"7xl"}>
       <HStack alignItems={"start"} gap={"6"}>
@@ -102,7 +102,7 @@ export default function RootLayout() {
               Bookmarks
             </Button>
             <Button variant={"ghost"} size={"2xl"} asChild>
-              <NavItem to={`/u/${user.username}`}>
+              <NavItem to={`/u/${profile.user.username}`}>
                 <User2 />
                 Profile
               </NavItem>
@@ -116,14 +116,11 @@ export default function RootLayout() {
             <Menu.Root closeOnSelect={false}>
               <Menu.Trigger w="full">
                 <HStack justifyContent={"center"}>
-                  <Avatar.Root>
-                    <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
-                    <Avatar.Fallback name="Nate Foss" />
-                  </Avatar.Root>
+                  <Avatar src={profile.profile_picture} />
                   <VStack gap={0}>
-                    <Text textStyle={"sm"}>{user.full_name}</Text>
+                    <Text textStyle={"sm"}>{profile.user.full_name}</Text>
                     <Text textStyle={"sm"} color={"fg.muted"}>
-                      @{user.username}
+                      @{profile.user.username}
                     </Text>
                   </VStack>
                   <ChevronsUpDown />
@@ -133,8 +130,8 @@ export default function RootLayout() {
                 <Menu.Content>
                   <Menu.ItemGroup>
                     <Menu.Item value="user">
-                      <Text>{user.full_name}</Text>
-                      <Text>@{user.username}</Text>
+                      <Text>{profile.user.full_name}</Text>
+                      <Text>@{profile.user.username}</Text>
                     </Menu.Item>
                   </Menu.ItemGroup>
                   <Menu.Separator />

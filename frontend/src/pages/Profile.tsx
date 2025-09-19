@@ -23,7 +23,7 @@ export default function ProfilePage() {
   const { data: profile, isPending } = useQuery({
     queryKey: ["profile", username],
     queryFn: async () => {
-      const { data } = await api.get(`profile/${username}/`);
+      const { data } = await api.get(`profiles/${username}/`);
       return data;
     },
   });

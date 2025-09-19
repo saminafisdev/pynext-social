@@ -2,7 +2,7 @@ import api from "@/api/apiClient";
 import { useQuery } from "@tanstack/react-query";
 
 async function fetchUser() {
-  const { data } = await api.get("auth/users/me/");
+  const { data } = await api.get("profiles/current/");
   return data;
 }
 

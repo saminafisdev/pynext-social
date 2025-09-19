@@ -18,7 +18,7 @@ export default function ProfileEditDialog({ profile }: { profile: Profile }) {
   const [profileBio, setProfileBio] = useState(profile?.bio);
   const { mutate: updateBio, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await api.patch(`profile/${profile.user.username}/`, {
+      const res = await api.patch(`profiles/${profile.user.username}/`, {
         bio: profileBio,
       });
       return res.data;

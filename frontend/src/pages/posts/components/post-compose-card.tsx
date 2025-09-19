@@ -20,7 +20,7 @@ import { useRef, useState } from "react";
 export default function PostCompose() {
   const queryClient = useQueryClient();
   const ref = useRef<HTMLTextAreaElement | null>(null);
-  const { data: user, isLoading } = useUser();
+  const { data: profile, isLoading } = useUser();
 
   const [postConent, setPostContent] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -61,7 +61,7 @@ export default function PostCompose() {
         <HStack>
           <Avatar.Root>
             <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
-            <Avatar.Fallback name={user.full_name} />
+            <Avatar.Fallback name={profile.full_name} />
           </Avatar.Root>
           <Dialog.Root
             size={"lg"}
@@ -88,11 +88,13 @@ export default function PostCompose() {
                   <HStack>
                     <Avatar.Root>
                       <Avatar.Image src="https://images.unsplash.com/photo-1511806754518-53bada35f930" />
-                      <Avatar.Fallback name={user.full_name} />
+                      <Avatar.Fallback name={profile.full_name} />
                     </Avatar.Root>
                     <Stack gap={0}>
-                      <Dialog.Title>{user.full_name}</Dialog.Title>
-                      <Dialog.Description>@{user.username}</Dialog.Description>
+                      <Dialog.Title>{profile.user.full_name}</Dialog.Title>
+                      <Dialog.Description>
+                        @{profile.user.username}
+                      </Dialog.Description>
                     </Stack>
                   </HStack>
                 </Dialog.Header>

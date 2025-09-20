@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import RootLayout from "@/components/layout/layout.tsx";
-import LoginPage from "./pages/login.tsx";
-import ProfilePage from "./pages/profile.tsx";
+import LoginPage from "@/pages/login.tsx";
+import ProfilePage from "./pages/profile/profile.tsx";
 import PostsHome from "@/pages/posts/index.tsx";
 import PostDetail from "./pages/posts/post-detail.tsx";
 import SignupPage from "./pages/signup.tsx";

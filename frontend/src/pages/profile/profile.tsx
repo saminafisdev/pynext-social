@@ -1,5 +1,4 @@
 import api from "@/api/apiClient";
-import { Avatar } from "@/components/ui/avatar";
 import {
   Box,
   Button,
@@ -12,10 +11,11 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { CalendarDays } from "lucide-react";
-import ProfileEditDialog from "./profile/components/profile-edit-dialog";
-import ProfilePosts from "./profile/components/profile-posts";
-import ProfileLoadingSkeleton from "./profile/components/profile-loading-skeleton";
+import ProfileEditDialog from "./components/profile-edit-dialog";
+import ProfilePosts from "./components/profile-posts";
+import ProfileLoadingSkeleton from "./components/profile-loading-skeleton";
 import { format, parseISO } from "date-fns";
+import ProfilePicture from "./components/profile-picture";
 
 export default function ProfilePage() {
   const { username } = useParams();
@@ -38,13 +38,7 @@ export default function ProfilePage() {
         ) : (
           <Box height={200} width={"full"} bg={"bg.muted"} />
         )}
-        <Avatar
-          src={profile.profile_picture}
-          width={120}
-          height={120}
-          marginY={-20}
-          marginLeft={2}
-        />
+        <ProfilePicture profile={profile} />
       </Box>
       <HStack alignItems={"center"} justifyContent={"space-between"}>
         <Stack gap={0} mt="4">

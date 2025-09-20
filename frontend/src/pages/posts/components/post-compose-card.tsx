@@ -21,6 +21,7 @@ export default function PostCompose() {
   const queryClient = useQueryClient();
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const { data: profile, isLoading } = useUser();
+  const { data: profile, isLoading } = useUser();
 
   const [postConent, setPostContent] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);

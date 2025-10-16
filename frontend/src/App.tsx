@@ -6,6 +6,9 @@ import PostsHome from "@/pages/posts/index.tsx";
 import PostDetail from "./pages/posts/post-detail.tsx";
 import SignupPage from "./pages/signup.tsx";
 import LoadingRoute from "./pages/startup-loading.tsx";
+import ChatDetailPage from "./pages/chat/page.tsx";
+import ChatIndex from "./pages/chat/chat-index.tsx";
+import ChatLayout from "./pages/chat/chat-layout.tsx";
 
 function App() {
   return (
@@ -23,6 +26,10 @@ function App() {
           <Route index element={<PostsHome />} />
           <Route path=":username/posts/:postId" element={<PostDetail />} />
           <Route path="/u/:username" element={<ProfilePage />} />
+          <Route path="chats" element={<ChatLayout />}>
+            <Route index element={<ChatIndex />} />
+            <Route path="/chats/:chatId" element={<ChatDetailPage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

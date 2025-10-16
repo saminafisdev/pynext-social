@@ -33,7 +33,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
         url_path="current",
     )
     def me(self, request, pk=None):
-        print("Somethign")
         profile = request.user.profile
         serializer = self.get_serializer(profile)
         return Response(serializer.data)

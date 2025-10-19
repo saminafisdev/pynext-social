@@ -49,7 +49,7 @@ export function NavItem({
 export default function RootLayout() {
   const { data: profile } = useUser();
   return (
-    <Container maxW={"7xl"}>
+    <Container>
       <HStack alignItems={"start"} gap={"6"}>
         <VStack
           alignItems={"start"}
@@ -84,15 +84,10 @@ export default function RootLayout() {
               <Home />
               Home
             </NavItem>
-            <Button variant={"ghost"} size={"2xl"} position={"relative"}>
+            <NavItem to="/chats">
               <MessageCircle />
               Messages
-              <Float>
-                <Circle size="5" bg="blue.500" color="white">
-                  3
-                </Circle>
-              </Float>
-            </Button>
+            </NavItem>
             <NavItem to="/friends">
               <UsersRound />
               Friends

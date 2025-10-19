@@ -4,22 +4,26 @@ import {
   Flex,
   HStack,
   IconButton,
+  Popover,
+  Portal,
   ScrollArea,
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import { SendHorizonal } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { SendHorizonal, Smile } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useStickToBottom } from "use-stick-to-bottom";
 import type { ChatDetail, ChatMessage } from "./types/chat";
 import { useParams } from "react-router";
+import { EmojiPickerComponent } from "./components/emoji-picler";
 
 export default function ChatDetailPage() {
   const { data: profile } = useUser();
   const [chatDetail, setChatDetail] = useState<ChatDetail | null>(null);
   const [chatList, setChatList] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState("");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const sticky = useStickToBottom();
 
   const { chatId } = useParams();
@@ -118,16 +122,40 @@ export default function ChatDetailPage() {
 
       <HStack height={"max-content"} alignItems={"end"} py={3}>
         <Textarea
+          size={"lg"}
           autoresize
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Message..."
+          ref={inputRef}
         />
+        <Popover.Root>
+          <Popover.Trigger asChild>
+            <IconButton variant={"ghost"}>
+              <Smile />
+            </IconButton>
+          </Popover.Trigger>
+          <Portal>
+            <Popover.Positioner>
+              <Popover.Content>
+                <Popover.Arrow />
+                <Popover.Body asChild>
+                  <EmojiPickerComponent
+                    inputMessage={message}
+                    setMessageInput={setMessage}
+                    inputRef={inputRef}
+                  />
+                </Popover.Body>
+              </Popover.Content>
+            </Popover.Positioner>
+          </Portal>
+        </Popover.Root>
         <IconButton
           aria-label="Send message"
           onClick={sendMessage}
           disabled={!message.trim()}
+          variant={"ghost"}
         >
           <SendHorizonal />
         </IconButton>

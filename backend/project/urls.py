@@ -25,6 +25,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("social.urls")),
+    path("api/", include("chat.urls")),
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("core.urls")),
 ] + debug_toolbar_urls()

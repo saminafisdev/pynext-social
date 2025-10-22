@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .filters import PostFilter
+from .filters import PostFilter, ProfileFilter
 
 from .permissions import IsAuthorOrReadOnly, IsPostLikeOwner, IsProfileOwnerOrReadOnly
 from .models import Comment, PostLike, Post, Profile
@@ -25,6 +25,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = "username"
     lookup_value_regex = r"[\w.@+-]+"
     http_method_names = ["get", "put", "patch", "head", "options"]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProfileFilter
 
     @action(
         detail=False,

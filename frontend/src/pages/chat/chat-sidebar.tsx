@@ -63,7 +63,7 @@ export default function ChatListSidebar() {
   );
 
   return (
-    <Box py={6} borderRightWidth={"1px"} px={4}>
+    <Box py={6} borderRightWidth={{ md: "1px" }} px={4}>
       <HStack gap={2}>
         <InputGroup startElement={<Search />}>
           <Input

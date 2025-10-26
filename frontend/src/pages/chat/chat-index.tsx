@@ -3,7 +3,7 @@ import { MessageCircleMoreIcon } from "lucide-react";
 
 export default function ChatIndex() {
   return (
-    <Center flexGrow={1} height={"100vh"}>
+    <Center flexGrow={1} height={"100vh"} hideBelow={"md"}>
       <VStack>
         <MessageCircleMoreIcon size={"64"} />
         <Text fontSize={"2xl"}>Select a chat to start conversation</Text>

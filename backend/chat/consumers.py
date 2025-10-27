@@ -60,6 +60,7 @@ def serialize_chats(chats_qs, context):
 
 class ChatListConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        print("Connecting")
         self.user = self.scope["user"]
 
         if not self.user.is_authenticated:

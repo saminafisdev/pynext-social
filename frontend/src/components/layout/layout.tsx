@@ -196,6 +196,35 @@ export default function RootLayout() {
             </NavItem>
           ))}
       </ButtonGroup>
+      <Menu.Root closeOnSelect={false}>
+        <Menu.Trigger>
+          <Avatar src={profile.profile_picture} />
+        </Menu.Trigger>
+        <Menu.Positioner>
+          <Menu.Content>
+            <Menu.ItemGroup>
+              <Menu.Item value="user">
+                <Text>{profile.user.full_name}</Text>
+                <Text>@{profile.user.username}</Text>
+              </Menu.Item>
+            </Menu.ItemGroup>
+            <Menu.Separator />
+            <Menu.Arrow />
+            <Menu.ItemGroup>
+              <Menu.Item value="theme">
+                <ThemeSwitch />
+              </Menu.Item>
+            </Menu.ItemGroup>
+            <Menu.Separator />
+            <Menu.Arrow />
+            <Menu.ItemGroup>
+              <Menu.Item value="logout" asChild>
+                <LogoutButton />
+              </Menu.Item>
+            </Menu.ItemGroup>
+          </Menu.Content>
+        </Menu.Positioner>
+      </Menu.Root>
     </HStack>
   );
 

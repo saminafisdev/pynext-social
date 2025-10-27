@@ -55,7 +55,7 @@ export default function PostCommentDialog({
   return (
     <Dialog.Root
       scrollBehavior={"inside"}
-      size={"lg"}
+      size={{ mdDown: "full", md: "lg" }}
       initialFocusEl={() => ref.current}
       open={open}
       onOpenChange={(details) => setOpen(details.open)}

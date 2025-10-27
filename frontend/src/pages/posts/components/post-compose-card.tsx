@@ -64,7 +64,7 @@ export default function PostCompose() {
             fallback={profile.user.full_name}
           />
           <Dialog.Root
-            size={"lg"}
+            size={{ mdDown: "full", md: "lg" }}
             open={isDialogOpen}
             onOpenChange={(e) => setIsDialogOpen(e.open)}
             initialFocusEl={() => ref.current}
@@ -112,7 +112,7 @@ export default function PostCompose() {
                       resize={"none"}
                       size={"xl"}
                       textStyle={"lg"}
-                      variant={"flushed"}
+                      variant={"subtle"}
                       ref={ref}
                       value={postConent}
                       onChange={(e) => setPostContent(e.target.value)}
@@ -126,6 +126,7 @@ export default function PostCompose() {
                       type="submit"
                       variant={"ghost"}
                       loading={isPending}
+                      disabled={!postConent.trim()}
                     >
                       <SendHorizonal />
                     </IconButton>

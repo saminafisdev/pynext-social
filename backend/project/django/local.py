@@ -10,3 +10,13 @@ DATABASES = {
         "PORT": env("DB_PORT"),  # Default PostgreSQL port
     }
 }
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": env.list("REDIS_CHANNEL_URL", default=("127.0.0.1", 6379)),
+        },
+    },
+}

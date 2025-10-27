@@ -5,6 +5,8 @@ import {
   HStack,
   Input,
   InputGroup,
+  LinkBox,
+  LinkOverlay,
   Portal,
   ScrollArea,
   Stack,
@@ -13,6 +15,7 @@ import {
 import { Search } from "lucide-react";
 import { type PropsWithChildren, useEffect, useState } from "react";
 import { useChatProfiles } from "@/hooks/use-chat-search";
+import { Link } from "react-router";
 
 // Intentionally no local mock types/data. Profiles are fetched from the API.
 
@@ -120,8 +123,9 @@ export function NewMessageDialogTrigger({ children }: PropsWithChildren) {
                                       Suggested Profiles
                                     </Text>
                                     {data.suggested_profiles.map((p) => (
-                                      <HStack
+                                      <LinkBox
                                         key={p.id}
+                                        as={HStack}
                                         p={2}
                                         _hover={{
                                           bg: "bg.muted",
@@ -145,7 +149,12 @@ export function NewMessageDialogTrigger({ children }: PropsWithChildren) {
                                             {p.user.username}
                                           </Text>
                                         </Stack>
-                                      </HStack>
+                                        <LinkOverlay asChild>
+                                          <Link
+                                            to={`/chats/new/?profileId=${p.id}`}
+                                          />
+                                        </LinkOverlay>
+                                      </LinkBox>
                                     ))}
                                   </>
                                 )}

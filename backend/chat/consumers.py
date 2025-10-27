@@ -1,11 +1,12 @@
 import json
 
 from asgiref.sync import sync_to_async
-from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
-from django.db.models import Subquery, OuterRef, F, Value, Prefetch
+from django.db.models import Subquery, F, Value, Prefetch
 from django.db.models.functions import Concat
+from django.shortcuts import get_object_or_404
 
 from chat.serializers import (
     ChatListSerializer,
@@ -65,6 +66,10 @@ class ChatListConsumer(AsyncWebsocketConsumer):
             await self.close(code=4001)
             return
 
+        self.group_name = f"chat_list_{self.user.id}"
+
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
+
         await self.accept()
 
         self.profile = await get_profile(self.user)
@@ -76,6 +81,16 @@ class ChatListConsumer(AsyncWebsocketConsumer):
 
         await self.send(
             text_data=json.dumps({"type": "chats_list", "chats": serialized_chats})
+        )
+
+    async def chat_list_update(self, event):
+        chat_id = event.get("chat_id")
+        serialized_chat_data = await self.get_serialized_chat(chat_id)
+
+        await self.send(
+            text_data=json.dumps(
+                {"type": "chats_list_update", "chat": serialized_chat_data}
+            )
         )
 
     @database_sync_to_async
@@ -93,18 +108,44 @@ class ChatListConsumer(AsyncWebsocketConsumer):
         )
         return list(chats_qs)
 
+    @database_sync_to_async
+    def get_serialized_chat(self, chat_id):
+        """Fetches a single chat and serializes it using the correct context."""
+        participants_qs = ChatParticipant.objects.exclude(
+            profile=self.profile
+        ).select_related("profile", "profile__user")
+        # Fetch the chat (using select_related/prefetch_related for efficiency)
+        chat = get_object_or_404(
+            Chat.objects.prefetch_related(
+                Prefetch(
+                    "participants",
+                    queryset=participants_qs,
+                    to_attr="other_participants",
+                )
+            ),
+            pk=chat_id,
+        )
+
+        # Serialize the data, including the necessary context for the serializer
+        serialized_data = ChatListSerializer(
+            chat, context={"self_profile": self.profile}
+        ).data
+
+        return serialized_data
+
 
 class ChatDetailConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.chat_id = self.scope["url_route"]["kwargs"]["chat_id"]
         self.user = self.scope["user"]
-        self.profile = await get_profile(self.user)
-        self.participant = await get_participant(self.chat_id, self.profile.id)
 
         # Reject unauthenticated users
         if not self.user.is_authenticated:
             await self.close(code=4001)
             return
+
+        self.chat_id = self.scope["url_route"]["kwargs"]["chat_id"]
+        self.profile = await get_profile(self.user)
+        self.participant = await get_participant(self.chat_id, self.profile.id)
 
         # ✅ Check if the chat exists and user is a participant
         chat = await get_chat(self.chat_id, self.profile.id)
@@ -158,6 +199,19 @@ class ChatDetailConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.user_group, {"type": "chat.message", "message": serialized_message}
         )
+
+        all_participants = await database_sync_to_async(
+            lambda: list(
+                ChatParticipant.objects.filter(chat=new_message.chat).select_related(
+                    "profile__user"
+                )
+            )
+        )()
+        for participant in all_participants:
+            user_group_name = f"chat_list_{participant.profile.user.id}"
+            await self.channel_layer.group_send(
+                user_group_name, {"type": "chat.list.update", "chat_id": self.chat_id}
+            )
 
     # Receive message from room group
     async def chat_message(self, event):

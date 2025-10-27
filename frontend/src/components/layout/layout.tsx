@@ -174,19 +174,20 @@ export default function RootLayout() {
       right={0}
       zIndex={10}
       bg={"bg"}
-      opacity={".95"}
       p={2}
-      justify="space-around"
+      justify="space-evenly"
       align="center"
+      height={"64px"}
+      shadow={"2xl"}
     >
       {/* Primary Navigation Icons - Max 3-5 items for bottom nav */}
       <ButtonGroup
-        flexGrow={1}
-        justifyContent={"space-evenly"}
+        // flexGrow={1}
+        // justifyContent={"space-evenly"}
         gap={0}
         width="full"
         variant={"ghost"}
-        size={"2xl"}
+        size={"xl"}
       >
         {navLinks
           .filter((link) => link.showOnMobileBottomNav)
@@ -198,7 +199,7 @@ export default function RootLayout() {
       </ButtonGroup>
       <Menu.Root closeOnSelect={false}>
         <Menu.Trigger>
-          <Avatar src={profile.profile_picture} />
+          <Avatar src={profile.profile_picture} size={"sm"} />
         </Menu.Trigger>
         <Menu.Positioner>
           <Menu.Content>
@@ -231,9 +232,9 @@ export default function RootLayout() {
   return (
     <Container>
       <HStack alignItems={"start"} gap={"6"}>
-        <DesktopSidebar />
         <MobileBottomNav />
-        <Box as={"main"} flexGrow={1}>
+        <DesktopSidebar />
+        <Box as={"main"} flexGrow={1} mb={"72px"}>
           <Outlet />
         </Box>
         <VStack

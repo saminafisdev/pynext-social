@@ -39,7 +39,17 @@ export default function ChatListSidebar() {
   useEffect(() => {
     if (lastMessage !== null) {
       const data = JSON.parse(lastMessage.data);
-      setChats(data.chats);
+      switch (data.type) {
+        case "chats_list":
+          setChats(data.chats);
+          break;
+        case "chats_list_update":
+          setChats((prevChats) => [
+            data.chat,
+            ...prevChats.filter((chat) => chat.id !== data.chat.id),
+          ]);
+          break;
+      }
     }
   }, [lastMessage]);
 

@@ -31,10 +31,13 @@ interface ChatItemInterface {
 export default function ChatListSidebar() {
   const [chats, setChats] = useState<ChatItemInterface[]>([]);
 
-  const { lastMessage } = useWebSocket("ws://localhost:8000/ws/chats/", {
-    onOpen: () => console.log("opened"),
-    shouldReconnect: () => true,
-  });
+  const { lastMessage } = useWebSocket(
+    `${import.meta.env.VITE_SOCKET_URL}/chats/`,
+    {
+      onOpen: () => console.log("opened"),
+      shouldReconnect: () => true,
+    }
+  );
 
   useEffect(() => {
     if (lastMessage !== null) {

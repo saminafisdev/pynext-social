@@ -14,7 +14,7 @@ export default function ChatDetailPage() {
   const sticky = useStickToBottom();
 
   const { chatId } = useParams();
-  const socketUrl = `ws://localhost:8000/ws/chats/${chatId}/`;
+  const socketUrl = `${import.meta.env.VITE_SOCKET_URL}/chats/${chatId}/`;
 
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onOpen: () => console.log("opened"),

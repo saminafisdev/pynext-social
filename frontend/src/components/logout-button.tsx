@@ -25,6 +25,8 @@ export default function LogoutButton() {
       textAlign={"left"}
       onClick={() => mutate()}
       loading={isPending}
+      variant={"solid"}
+      size={"md"}
     >
       <LogOut />
       Sign out

@@ -182,8 +182,8 @@ export default function RootLayout() {
     >
       {/* Primary Navigation Icons - Max 3-5 items for bottom nav */}
       <ButtonGroup
-        // flexGrow={1}
-        // justifyContent={"space-evenly"}
+        flexGrow={1}
+        justifyContent={"space-evenly"}
         gap={0}
         width="full"
         variant={"ghost"}
@@ -196,36 +196,36 @@ export default function RootLayout() {
               {link.icon}
             </NavItem>
           ))}
+        <Menu.Root closeOnSelect={false}>
+          <Menu.Trigger>
+            <Avatar src={profile.profile_picture} size={"sm"} />
+          </Menu.Trigger>
+          <Menu.Positioner>
+            <Menu.Content>
+              <Menu.ItemGroup>
+                <Menu.Item value="user">
+                  <Text>{profile.user.full_name}</Text>
+                  <Text>@{profile.user.username}</Text>
+                </Menu.Item>
+              </Menu.ItemGroup>
+              <Menu.Separator />
+              <Menu.Arrow />
+              <Menu.ItemGroup>
+                <Menu.Item value="theme">
+                  <ThemeSwitch />
+                </Menu.Item>
+              </Menu.ItemGroup>
+              <Menu.Separator />
+              <Menu.Arrow />
+              <Menu.ItemGroup>
+                <Menu.Item value="logout" asChild>
+                  <LogoutButton />
+                </Menu.Item>
+              </Menu.ItemGroup>
+            </Menu.Content>
+          </Menu.Positioner>
+        </Menu.Root>
       </ButtonGroup>
-      <Menu.Root closeOnSelect={false}>
-        <Menu.Trigger>
-          <Avatar src={profile.profile_picture} size={"sm"} />
-        </Menu.Trigger>
-        <Menu.Positioner>
-          <Menu.Content>
-            <Menu.ItemGroup>
-              <Menu.Item value="user">
-                <Text>{profile.user.full_name}</Text>
-                <Text>@{profile.user.username}</Text>
-              </Menu.Item>
-            </Menu.ItemGroup>
-            <Menu.Separator />
-            <Menu.Arrow />
-            <Menu.ItemGroup>
-              <Menu.Item value="theme">
-                <ThemeSwitch />
-              </Menu.Item>
-            </Menu.ItemGroup>
-            <Menu.Separator />
-            <Menu.Arrow />
-            <Menu.ItemGroup>
-              <Menu.Item value="logout" asChild>
-                <LogoutButton />
-              </Menu.Item>
-            </Menu.ItemGroup>
-          </Menu.Content>
-        </Menu.Positioner>
-      </Menu.Root>
     </HStack>
   );
 

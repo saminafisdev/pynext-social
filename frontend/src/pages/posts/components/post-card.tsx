@@ -8,15 +8,18 @@ import {
   Box,
   Button,
   Card,
+  HoverCard,
   HStack,
   Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import PostCommentDialog from "@/components/post-comment-dialog";
 import { PostMenu } from "./post-menu";
 import { useState } from "react";
+import { format, parseISO } from "date-fns";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export default function PostCard({ post }: { post: Post }) {
   const navigate = useNavigate();
@@ -45,18 +48,49 @@ export default function PostCard({ post }: { post: Post }) {
     <Card.Root borderRadius={"none"}>
       <Card.Header>
         <HStack>
-          <Avatar.Root>
-            <Avatar.Image src={post.author.profile_picture} />
-            <Avatar.Fallback name={user.full_name} />
-          </Avatar.Root>
+          <Link to={`/u/${user.username}`}>
+            <Avatar.Root>
+              <Avatar.Image src={post.author.profile_picture} />
+              <Avatar.Fallback name={user.full_name} />
+            </Avatar.Root>
+          </Link>
           <Stack gap={0}>
-            <Text fontWeight={"semibold"} textStyle={"sm"}>
-              {user.full_name}
-            </Text>
-            <Text color={"fg.muted"} textStyle={"sm"}>
-              @{user.username} &bull; {timeAgo(post.created_at)}{" "}
-              {post.edited && "(edited)"}
-            </Text>
+            <HoverCard.Root positioning={{ placement: "top" }}>
+              <HoverCard.Trigger asChild>
+                <Text fontWeight={"semibold"} textStyle={"sm"} asChild>
+                  <Link to={`/u/${user.username}`}>{user.full_name}</Link>
+                </Text>
+              </HoverCard.Trigger>
+              <HoverCard.Positioner>
+                <HoverCard.Content>
+                  {/* <HoverCard.Arrow>
+                    <HoverCard.ArrowTip />
+                  </HoverCard.Arrow> */}
+                  <HStack gap={4} alignItems={"flex-start"}>
+                    <Avatar.Root>
+                      <Avatar.Image src={post.author.profile_picture} />
+                      <Avatar.Fallback name={user.full_name} />
+                    </Avatar.Root>
+                    <Stack gap={0}>
+                      <Text fontWeight={"semibold"}>{user.full_name}</Text>
+                      <Text color={"fg.muted"}>@{user.username}</Text>
+                      <Text color={"fg.muted"}>
+                        Joined {format(parseISO(user.date_joined), "LLLL yyyy")}
+                      </Text>
+                    </Stack>
+                  </HStack>
+                </HoverCard.Content>
+              </HoverCard.Positioner>
+            </HoverCard.Root>
+
+            <Tooltip
+              content={format(post.created_at, "LLLL d, yyyy 'at' h:mm a")}
+            >
+              <Text color={"fg.muted"} textStyle={"sm"}>
+                @{user.username} &bull; {timeAgo(post.created_at)}
+                {post.edited && "(edited)"}
+              </Text>
+            </Tooltip>
           </Stack>
           {post.is_owner && (
             <Box marginLeft={"auto"}>

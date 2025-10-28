@@ -1,7 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import BookmarksCard from "./components/bookmark-card";
 import api from "@/api/apiClient";
-import { AbsoluteCenter, Box, For, Icon, Stack, Text } from "@chakra-ui/react";
+import {
+  AbsoluteCenter,
+  Box,
+  For,
+  Heading,
+  HStack,
+  Icon,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import type { BookmarkInterface } from "./type";
 import { Bookmark } from "lucide-react";
 
@@ -15,7 +24,12 @@ export default function BookmarksListPage() {
   });
   return (
     <Box py={2}>
-      <Text textStyle={"2xl"}>Bookmarks</Text>
+      <HStack alignItems={"end"} gap={4} py={2}>
+        {/* <Icon size={"xl"}>
+          <ArrowLeft />
+        </Icon> */}
+        <Heading textStyle={"2xl"}>Bookmarks</Heading>
+      </HStack>
       <Stack gapY={4} mt={4}>
         <For each={bookmarks} fallback={<EmptyBookmark />}>
           {(item: BookmarkInterface) => (

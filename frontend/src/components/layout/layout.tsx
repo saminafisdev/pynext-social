@@ -36,7 +36,12 @@ export function NavItem({
   const isActive = Boolean(match);
 
   return (
-    <Button fontWeight={isActive ? "extrabold" : "normal"} asChild>
+    <Button
+      fontWeight={isActive ? "extrabold" : "normal"}
+      variant={isActive ? "subtle" : "ghost"}
+      borderRadius={"full"}
+      asChild
+    >
       <Link to={to}>{children}</Link>
     </Button>
   );

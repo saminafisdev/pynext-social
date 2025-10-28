@@ -60,7 +60,6 @@ def serialize_chats(chats_qs, context):
 
 class ChatListConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        print("Connecting")
         self.user = self.scope["user"]
 
         if not self.user.is_authenticated:
@@ -162,7 +161,6 @@ class ChatDetailConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
         # Send initial messages
-        print(chat.other_user)
         serialized_messages = await self.get_chat_messages(self.chat_id)
         chat_serializer = await sync_to_async(ChatSerializer)(chat)
 

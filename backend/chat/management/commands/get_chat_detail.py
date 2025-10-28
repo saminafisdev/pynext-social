@@ -12,10 +12,3 @@ class Command(BaseCommand):
         messages = ChatMessage.objects.select_related("sender__profile__user").filter(
             chat=chat
         )
-        print(ChatMessageSerializer(messages, many=True).data)
-        # print(
-        #     "serializer",
-        #     ChatSerializer(chat, context={"profile_id": 1}).data,
-        # )
-
-        # self.stdout.write(self.style.SUCCESS('Successfully closed poll "%s"' % poll_id))

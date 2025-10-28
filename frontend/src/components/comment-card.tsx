@@ -1,15 +1,7 @@
 import type { Comment } from "@/pages/posts/types/comment";
 import { timeAgo } from "@/lib/time";
-import { HatGlasses, Heart, MessageCircle } from "lucide-react";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Card,
-  HStack,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { HatGlasses } from "lucide-react";
+import { Box, ButtonGroup, Card, HStack, Stack, Text } from "@chakra-ui/react";
 import { Avatar } from "./ui/avatar";
 
 interface CommentCardProps {
@@ -46,14 +38,14 @@ export default function CommentCard({ comment }: CommentCardProps) {
       </Card.Body>
       <Card.Footer>
         <ButtonGroup size={"sm"}>
-          <Button variant={"ghost"}>
+          {/* <Button variant={"ghost"}>
             <Heart />
             10k
-          </Button>
-          <Button variant={"ghost"}>
+          </Button> */}
+          {/* <Button variant={"ghost"}>
             <MessageCircle />
             10k
-          </Button>
+          </Button> */}
         </ButtonGroup>
       </Card.Footer>
     </Card.Root>

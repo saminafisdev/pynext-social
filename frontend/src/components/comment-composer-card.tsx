@@ -1,4 +1,4 @@
-import { ImagePlus, SendHorizonal } from "lucide-react";
+import { SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/api/apiClient";
@@ -47,9 +47,9 @@ export default function CommentComposerCard({
           onChange={(e) => setCommentContent(e.target.value)}
         />
         <ButtonGroup size={"sm"} width="full" px={2}>
-          <IconButton variant={"subtle"}>
+          {/* <IconButton variant={"subtle"}>
             <ImagePlus />
-          </IconButton>
+          </IconButton> */}
           <IconButton
             variant={"subtle"}
             ml={"auto"}

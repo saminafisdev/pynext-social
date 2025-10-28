@@ -14,7 +14,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ImagePlus, SendHorizonal } from "lucide-react";
+import { SendHorizonal } from "lucide-react";
 import { useRef, useState } from "react";
 
 export default function PostCompose() {
@@ -119,9 +119,9 @@ export default function PostCompose() {
                     />
                   </Dialog.Body>
                   <Dialog.Footer>
-                    <IconButton variant={"ghost"} mr={"auto"}>
+                    {/* <IconButton variant={"ghost"} mr={"auto"}>
                       <ImagePlus />
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                       type="submit"
                       variant={"ghost"}

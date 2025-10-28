@@ -9,6 +9,7 @@ import {
   Button,
   Card,
   HStack,
+  Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -72,7 +73,8 @@ export default function PostCard({ post }: { post: Post }) {
         }
         cursor={"pointer"}
       >
-        <Text whiteSpace={"pre-wrap"}>{post.content}</Text>
+        {post?.content && <Text whiteSpace={"pre-wrap"}>{post.content}</Text>}
+        {post?.image && <Image my={2} src={post.image} />}
       </Card.Body>
       <Card.Footer>
         <Button variant={"ghost"} onClick={() => mutate()}>

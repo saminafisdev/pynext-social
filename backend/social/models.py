@@ -27,7 +27,18 @@ class Profile(models.Model):
 
 class Post(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.TextField(
+        blank=True,
+        null=True,
+        help_text="The text content of the post.",
+    )
+    image = ResizedImageField(
+        quality=85,
+        upload_to="post_images/",
+        blank=True,
+        null=True,
+        help_text="The optional image for the post.",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     edited = models.BooleanField(default=False)

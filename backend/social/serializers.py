@@ -47,6 +47,18 @@ class PostSerializer(serializers.ModelSerializer):
             "id",
             "author",
             "content",
+            "image",
+            "has_liked",
+            "likes_count",
+            "is_owner",
+            "edited",
+            "comments_count",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = (
+            "id",
+            "author",
             "has_liked",
             "likes_count",
             "is_owner",
@@ -64,3 +76,20 @@ class PostSerializer(serializers.ModelSerializer):
         profile = self.context["request"].user.profile
         validated_data["author"] = profile
         return super().create(validated_data)
+
+    def validate(self, data):
+        """
+        Check that a post contains either text content, an image, or both.
+        """
+        content = data.get("content")
+        image = data.get("image")
+
+        text_content = content.strip() if content else None
+
+        # Check if both are empty/null
+        if not text_content and not image:
+            raise serializers.ValidationError(
+                "A post must contain either text content, an image, or both."
+            )
+
+        return data

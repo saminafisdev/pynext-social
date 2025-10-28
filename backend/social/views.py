@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from .filters import PostFilter, ProfileFilter
 
 from .permissions import IsAuthorOrReadOnly, IsPostLikeOwner, IsProfileOwnerOrReadOnly
-from .models import Comment, PostLike, Post, Profile
+from .models import Bookmark, Comment, PostLike, Post, Profile
 from .serializers import (
+    BookmarkSerializer,
     CommentSerializer,
     LikeSerializer,
     PostSerializer,
@@ -116,3 +117,18 @@ class PostLikeViewSet(
     def perform_create(self, serializer):
         post_id = self.kwargs.get("post_pk")
         serializer.save(profile=self.request.user.profile, post_id=post_id)
+
+
+class BookmarkViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+):
+    serializer_class = BookmarkSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.request.user.profile.bookmarks.select_related(
+            "post__author__user"
+        ).all()

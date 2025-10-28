@@ -1,8 +1,9 @@
 from os import read
+from attr import fields
 from rest_framework import serializers
 
 from core.serializers import UserSerializer
-from .models import Post, Profile, PostLike, Comment
+from .models import Bookmark, Post, Profile, PostLike, Comment
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -93,3 +94,22 @@ class PostSerializer(serializers.ModelSerializer):
             )
 
         return data
+
+
+class BookmarkSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True)
+    post_id = serializers.PrimaryKeyRelatedField(
+        queryset=Post.objects.all(),  # Ensures the ID refers to a real Post
+        source="post",  # Tells DRF to save this value to the 'post' model field
+        write_only=True,  # Ensures this field is ONLY used for input
+    )
+
+    class Meta:
+        model = Bookmark
+        fields = ("id", "post", "post_id", "created_at")
+        read_only_fields = ("id", "created_at")
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+        validated_data["profile"] = user.profile
+        return super().create(validated_data)

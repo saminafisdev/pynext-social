@@ -64,3 +64,14 @@ class PostLike(models.Model):
 
     class Meta:
         unique_together = ("post", "profile")
+
+
+class Bookmark(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    profile = models.ForeignKey(
+        Profile, related_name="bookmarks", on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("post", "profile")

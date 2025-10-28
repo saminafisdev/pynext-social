@@ -161,7 +161,7 @@ export default function PostCard({ post }: { post: Post }) {
           variant={"ghost"}
           onClickCapture={() => toggleBookmarkMutation.mutate()}
         >
-          {post.is_bookmarked ? <Bookmark fill="black" /> : <Bookmark />}
+          {post.is_bookmarked ? <Bookmark fill="currentColor" /> : <Bookmark />}
         </IconButton>
       </Card.Footer>
     </Card.Root>

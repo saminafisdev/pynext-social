@@ -53,7 +53,8 @@ export default function PostCard({ post }: { post: Post }) {
               {user.full_name}
             </Text>
             <Text color={"fg.muted"} textStyle={"sm"}>
-              @{user.username} &bull; {timeAgo(post.created_at)}
+              @{user.username} &bull; {timeAgo(post.created_at)}{" "}
+              {post.edited && "(edited)"}
             </Text>
           </Stack>
           {post.is_owner && (

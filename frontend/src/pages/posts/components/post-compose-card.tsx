@@ -2,11 +2,11 @@ import api from "@/api/apiClient";
 import { Avatar } from "@/components/ui/avatar";
 import { useUser } from "@/hooks/use-user";
 import {
+  Button,
   Card,
   CloseButton,
   Dialog,
   HStack,
-  IconButton,
   Input,
   SkeletonCircle,
   Stack,
@@ -14,7 +14,6 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SendHorizonal } from "lucide-react";
 import { useRef, useState } from "react";
 
 export default function PostCompose() {
@@ -45,7 +44,7 @@ export default function PostCompose() {
             <SkeletonCircle size={10} />
             <Input
               variant={"flushed"}
-              placeholder="Post on Gull"
+              placeholder="Create a post"
               textStyle={"2xl"}
               pb={2}
               readOnly
@@ -56,7 +55,7 @@ export default function PostCompose() {
     );
 
   return (
-    <Card.Root>
+    <Card.Root borderRadius={"none"}>
       <Card.Body>
         <HStack>
           <Avatar
@@ -71,10 +70,11 @@ export default function PostCompose() {
           >
             <Dialog.Trigger flexGrow={1} ml={2}>
               <Input
-                variant={"flushed"}
-                placeholder="Post on Gull"
-                textStyle={"2xl"}
-                pb={2}
+                variant={"outline"}
+                placeholder="Create a post"
+                textStyle={"xl"}
+                py={6}
+                borderRadius={"full"}
                 readOnly
               />
             </Dialog.Trigger>
@@ -108,7 +108,7 @@ export default function PostCompose() {
                     <Textarea
                       autoresize
                       maxH={"20lh"}
-                      placeholder="What's on your mind"
+                      placeholder={`What's on your mind, ${profile.user.first_name}?`}
                       resize={"none"}
                       size={"xl"}
                       textStyle={"lg"}
@@ -122,14 +122,13 @@ export default function PostCompose() {
                     {/* <IconButton variant={"ghost"} mr={"auto"}>
                       <ImagePlus />
                     </IconButton> */}
-                    <IconButton
+                    <Button
                       type="submit"
-                      variant={"ghost"}
                       loading={isPending}
                       disabled={!postConent.trim()}
                     >
-                      <SendHorizonal />
-                    </IconButton>
+                      Post
+                    </Button>
                   </Dialog.Footer>
                 </form>
               </Dialog.Content>

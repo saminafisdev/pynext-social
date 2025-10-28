@@ -31,7 +31,7 @@ export default function ProfilePage() {
   if (isPending) return <ProfileLoadingSkeleton />;
 
   return (
-    <Stack>
+    <Stack maxW={"3xl"}>
       <Box>
         {profile.cover_photo ? (
           <Image height={200} width={"full"} src={profile.cover_photo} />

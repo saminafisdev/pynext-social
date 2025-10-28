@@ -230,11 +230,11 @@ export default function RootLayout() {
   );
 
   return (
-    <Container>
+    <Container fluid>
       <HStack alignItems={"start"} gap={"6"}>
         <MobileBottomNav />
         <DesktopSidebar />
-        <Box as={"main"} flexGrow={1} mb={"72px"}>
+        <Box as={"main"} flexGrow={1} mb={"72px"} maxW={"4xl"} w="full">
           <Outlet />
         </Box>
         <VStack

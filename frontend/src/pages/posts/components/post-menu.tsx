@@ -5,16 +5,23 @@ import {
   Button,
   CloseButton,
   Dialog,
+  HStack,
   IconButton,
   Menu,
   Portal,
+  Stack,
   Textarea,
 } from "@chakra-ui/react";
 import { Ellipsis } from "lucide-react";
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Avatar } from "@/components/ui/avatar";
+import { useUser } from "@/hooks/use-user";
+import { timeAgo } from "@/lib/time";
 
 export function PostMenu({ post }: { post: Post }) {
+  const { data: profile } = useUser();
+  const ref = useRef<HTMLTextAreaElement | null>(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -70,10 +77,12 @@ export function PostMenu({ post }: { post: Post }) {
         <Menu.Content>
           <Menu.Item value="edit">
             <Dialog.Root
+              size={{ mdDown: "full", md: "lg" }}
               open={editOpen}
               onOpenChange={(e: boolean | { open?: boolean }) =>
                 setEditOpen(typeof e === "boolean" ? e : Boolean(e.open))
               }
+              initialFocusEl={() => ref.current}
               role="dialog"
             >
               <Dialog.Trigger w="full" textAlign={"left"}>
@@ -85,10 +94,30 @@ export function PostMenu({ post }: { post: Post }) {
                 <Dialog.Positioner>
                   <Dialog.Content>
                     <Dialog.Header>
-                      <Dialog.Title>Edit post</Dialog.Title>
+                      <HStack>
+                        <Avatar
+                          src={profile.profile_picture}
+                          fallback={profile.user.full_name}
+                        />
+                        <Stack gap={0}>
+                          <Dialog.Title>{profile.user.full_name}</Dialog.Title>
+                          <Dialog.Description>
+                            @{profile.user.username} &bull;{" "}
+                            {timeAgo(post.created_at)}{" "}
+                            {post.edited && "(edited)"}
+                          </Dialog.Description>
+                        </Stack>
+                      </HStack>
                     </Dialog.Header>
                     <Dialog.Body>
                       <Textarea
+                        autoresize
+                        maxH={"20lh"}
+                        resize={"none"}
+                        size={"xl"}
+                        textStyle={"lg"}
+                        variant={"subtle"}
+                        ref={ref}
                         value={editedText}
                         onChange={(e) => setEditedText(e.target.value)}
                         minH="120px"
@@ -99,14 +128,17 @@ export function PostMenu({ post }: { post: Post }) {
                         <Button variant="outline">Cancel</Button>
                       </Dialog.ActionTrigger>
                       <Button
-                        colorPalette="blue"
                         onClick={() =>
                           updateMutation.mutate({ content: editedText })
                         }
-                        disabled={noChanges || updateMutation.isPending}
+                        disabled={
+                          noChanges ||
+                          updateMutation.isPending ||
+                          !editedText.trim()
+                        }
                         loading={updateMutation.isPending}
                       >
-                        Update
+                        Save
                       </Button>
                     </Dialog.Footer>
                     <Dialog.CloseTrigger asChild>

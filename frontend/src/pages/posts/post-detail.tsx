@@ -21,7 +21,7 @@ export default function PostDetail() {
   if (isPending) return <PostLoadingSkeleton />;
 
   return (
-    <Box>
+    <Box maxW={"3xl"}>
       <HStack bg={"bg.subtle"} alignItems={"center"} p={4}>
         <IconButton variant={"ghost"} asChild>
           <Link to={"/"}>

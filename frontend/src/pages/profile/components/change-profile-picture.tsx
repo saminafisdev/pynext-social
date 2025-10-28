@@ -23,7 +23,7 @@ export default function ChangeProfilePicture({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       if (!file) return;
       const formData = new FormData();
@@ -87,7 +87,9 @@ export default function ChangeProfilePicture({
               <Dialog.ActionTrigger asChild>
                 <Button variant="outline">Cancel</Button>
               </Dialog.ActionTrigger>
-              <Button onClick={() => mutate()}>Upload</Button>
+              <Button onClick={() => mutate()} loading={isPending}>
+                Upload
+              </Button>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
               <CloseButton size="sm" />

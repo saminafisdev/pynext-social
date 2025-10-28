@@ -57,7 +57,7 @@ export default function LoginPage() {
   };
 
   return (
-    <AbsoluteCenter w="full">
+    <AbsoluteCenter w="full" p="2">
       <Box as="form" maxW="md" boxSize={"lg"} onSubmit={handleSubmit(onSubmit)}>
         <Fieldset.Root size="lg" maxW="md">
           <Stack>

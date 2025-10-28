@@ -17,3 +17,8 @@ DATABASES = {
         ssl_require=True,  # important for Render
     )
 }
+
+ALLOWED_WS_ORIGINS = [
+    "https://djsocial.onrender.com",
+    "https://djsocial-omega.vercel.app",
+]

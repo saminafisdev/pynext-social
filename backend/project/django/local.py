@@ -20,3 +20,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+ALLOWED_WS_ORIGINS = ["*"]

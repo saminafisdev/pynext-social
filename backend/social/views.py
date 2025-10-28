@@ -1,3 +1,4 @@
+import profile
 from django.db.models import Count, Exists, OuterRef
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, status, viewsets
@@ -64,8 +65,29 @@ class PostViewSet(viewsets.ModelViewSet):
 
         return Response({"has_liked": True}, status=status.HTTP_200_OK)
 
+    @action(
+        detail=True,
+        methods=["post"],
+        permission_classes=[IsAuthenticated],
+        url_path="bookmark",
+    )
+    def toggle_bookmark(self, request, pk=None):
+        post = self.get_object()
+        profile = request.user.profile
+
+        bookmark, created = Bookmark.objects.get_or_create(post=post, profile=profile)
+
+        if not created:
+            bookmark.delete()
+            return Response({"is_bookmarked": False}, status=status.HTTP_200_OK)
+
+        return Response({"is_bookmarked": True}, status=status.HTTP_200_OK)
+
     def get_queryset(self):
         qs = PostLike.objects.filter(
+            post=OuterRef("pk"), profile=self.request.user.profile
+        )
+        bookmark_qs = Bookmark.objects.filter(
             post=OuterRef("pk"), profile=self.request.user.profile
         )
         return (
@@ -73,6 +95,7 @@ class PostViewSet(viewsets.ModelViewSet):
                 likes_count=Count("likes", distinct=True),
                 comments_count=Count("comments", distinct=True),
                 has_liked=Exists(qs),
+                is_bookmarked=Exists(bookmark_qs),
             )
             .select_related("author__user")
             .order_by("-created_at")

@@ -12,6 +12,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import {
+  Bookmark,
   ChevronsUpDown,
   Home,
   MessageCircle,
@@ -69,12 +70,12 @@ export default function RootLayout() {
       icon: <MessageCircle />,
       showOnMobileBottomNav: true, // Appears in the bottom bar (often combined with a "Chats" icon)
     },
-    // {
-    //   name: "Bookmarks",
-    //   href: "/bookmarks",
-    //   icon: <Bookmark />,
-    //   showOnMobileBottomNav: true, // Hidden from the bottom bar (reserved for desktop or hamburger menu)
-    // },
+    {
+      name: "Bookmarks",
+      href: "/bookmarks",
+      icon: <Bookmark />,
+      showOnMobileBottomNav: true, // Hidden from the bottom bar (reserved for desktop or hamburger menu)
+    },
     // {
     //   name: "Settings",
     //   href: "/settings",

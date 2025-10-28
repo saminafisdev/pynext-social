@@ -10,6 +10,7 @@ import {
   Card,
   HoverCard,
   HStack,
+  IconButton,
   Image,
   Stack,
   Text,
@@ -36,6 +37,42 @@ export default function PostCard({ post }: { post: Post }) {
       queryClient.invalidateQueries({
         queryKey: ["post", String(post.id)],
       });
+    },
+  });
+
+  const toggleBookmarkMutation = useMutation({
+    mutationFn: async () => {
+      const { data } = await api.post(`posts/${post.id}/bookmark/`, {
+        post_id: post.id,
+      });
+      return data;
+    },
+    onSuccess: async (data) => {
+      await Promise.all([
+        queryClient.setQueryData<Post | undefined>(
+          ["post", String(post.id)],
+          (oldPost) => {
+            if (!oldPost) return oldPost;
+            return {
+              ...oldPost,
+              is_bookmarked: data.is_bookmarked,
+            };
+          }
+        ),
+
+        queryClient.setQueryData<Post[] | undefined>(["posts"], (oldPost) => {
+          if (!oldPost) return oldPost;
+          return oldPost.map((oldPost) => {
+            if (oldPost.id !== post.id) return oldPost;
+            return {
+              ...oldPost,
+              is_bookmarked: data.is_bookmarked,
+            };
+          });
+        }),
+
+        queryClient.invalidateQueries({ queryKey: ["bookmarks"] }),
+      ]);
     },
   });
 
@@ -120,9 +157,12 @@ export default function PostCard({ post }: { post: Post }) {
           open={isDialogOpen}
           setOpen={setIsDialogOpen}
         />
-        <Button variant={"ghost"}>
-          <Bookmark />
-        </Button>
+        <IconButton
+          variant={"ghost"}
+          onClickCapture={() => toggleBookmarkMutation.mutate()}
+        >
+          {post.is_bookmarked ? <Bookmark fill="black" /> : <Bookmark />}
+        </IconButton>
       </Card.Footer>
     </Card.Root>
   );

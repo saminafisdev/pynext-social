@@ -41,6 +41,7 @@ class PostSerializer(serializers.ModelSerializer):
     comments_count = serializers.IntegerField(read_only=True)
     has_liked = serializers.BooleanField(read_only=True)
     is_owner = serializers.SerializerMethodField()
+    is_bookmarked = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -52,6 +53,7 @@ class PostSerializer(serializers.ModelSerializer):
             "has_liked",
             "likes_count",
             "is_owner",
+            "is_bookmarked",
             "edited",
             "comments_count",
             "created_at",
@@ -63,6 +65,7 @@ class PostSerializer(serializers.ModelSerializer):
             "has_liked",
             "likes_count",
             "is_owner",
+            "is_bookmarked",
             "edited",
             "comments_count",
             "created_at",
@@ -72,6 +75,11 @@ class PostSerializer(serializers.ModelSerializer):
     def get_is_owner(self, obj):
         request = self.context.get("request")
         return request.user.is_authenticated and obj.author.user == request.user
+
+    def get_is_bookmarked(self, obj):
+        if hasattr(obj, "is_bookmarked"):
+            return obj.is_bookmarked
+        return False
 
     def create(self, validated_data):
         profile = self.context["request"].user.profile

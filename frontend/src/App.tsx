@@ -10,6 +10,7 @@ import ChatDetailPage from "./pages/chat/page.tsx";
 import ChatIndex from "./pages/chat/chat-index.tsx";
 import ChatLayout from "./pages/chat/chat-layout.tsx";
 import NewChatPage from "./pages/chat/new-chat.tsx";
+import BookmarksListPage from "./pages/bookmarks/index.tsx";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/chats/:chatId" element={<ChatDetailPage />} />
             <Route path="/chats/new" element={<NewChatPage />} />
           </Route>
+          <Route path="/bookmarks" element={<BookmarksListPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

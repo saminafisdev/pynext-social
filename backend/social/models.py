@@ -1,18 +1,21 @@
-from datetime import timedelta
 from django.db import models
 from django.conf import settings
+from django_resized import ResizedImageField
 
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
-    profile_picture = models.ImageField(
+    profile_picture = ResizedImageField(
+        size=[600, 600],
+        quality=85,
         upload_to="profile_pics/",
         blank=True,
         null=True,
         default="profile_pics/default.jpg",
     )
-    cover_photo = models.ImageField(
+    cover_photo = ResizedImageField(
+        quality=85,
         upload_to="cover_photo/",
         blank=True,
         null=True,

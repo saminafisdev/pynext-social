@@ -1,8 +1,8 @@
-import profile
-from django.db.models import Count, Exists, OuterRef
+from django.db.models import Count, Exists, OuterRef, Q, Value
+from django.db.models.functions import Concat
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, status, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -17,6 +17,17 @@ from .serializers import (
     PostSerializer,
     ProfileSerializer,
 )
+
+
+@api_view(["GET"])
+def search(request):
+    query = request.query_params.get("q", "")
+    profiles = Profile.objects.annotate(
+        full_name=Concat("user__first_name", Value(" "), "user__last_name")
+    ).filter(Q(user__username__icontains=query) | Q(full_name__icontains=query))
+
+    serializer = ProfileSerializer(profiles, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

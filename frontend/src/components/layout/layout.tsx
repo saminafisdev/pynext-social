@@ -5,8 +5,6 @@ import {
   Container,
   HStack,
   Icon,
-  Input,
-  InputGroup,
   Menu,
   Text,
   VStack,
@@ -16,7 +14,6 @@ import {
   ChevronsUpDown,
   Home,
   MessageCircle,
-  Search,
   User2,
 } from "lucide-react";
 import { Link, Outlet, useMatch } from "react-router";
@@ -24,6 +21,10 @@ import ThemeSwitch from "../themeSwitch";
 import LogoutButton from "../logout-button";
 import { useUser } from "@/hooks/use-user";
 import { Avatar } from "../ui/avatar";
+import {
+  GlobalSearchInput,
+  GlobalSearchInputDialog,
+} from "../global-search-input";
 
 export function NavItem({
   to,
@@ -79,7 +80,7 @@ export default function RootLayout() {
       name: "Bookmarks",
       href: "/bookmarks",
       icon: <Bookmark />,
-      showOnMobileBottomNav: true, // Hidden from the bottom bar (reserved for desktop or hamburger menu)
+      showOnMobileBottomNav: false, // Hidden from the bottom bar (reserved for desktop or hamburger menu)
     },
     // {
     //   name: "Settings",
@@ -202,6 +203,7 @@ export default function RootLayout() {
               {link.icon}
             </NavItem>
           ))}
+        <GlobalSearchInputDialog />
         <Menu.Root closeOnSelect={false}>
           <Menu.Trigger>
             <Avatar src={profile.profile_picture} size={"sm"} />
@@ -250,14 +252,7 @@ export default function RootLayout() {
           gap={0}
           hideBelow={"md"}
         >
-          <InputGroup startElement={<Search />}>
-            <Input
-              placeholder="Search"
-              variant={"subtle"}
-              borderRadius={"full"}
-              size={"lg"}
-            />
-          </InputGroup>
+          <GlobalSearchInput />
         </VStack>
       </HStack>
     </Container>

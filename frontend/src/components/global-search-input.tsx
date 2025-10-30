@@ -16,6 +16,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { useDebounce } from "use-debounce";
 import { Link } from "react-router";
 import { Avatar } from "./ui/avatar";
 
@@ -25,6 +26,7 @@ export function GlobalSearchInput({
   dialog?: ReturnType<typeof useDialog>;
 }) {
   const [inputValue, setInputValue] = useState("");
+  const [value] = useDebounce(inputValue, 300);
 
   const { collection: profiles, set } = useListCollection<Profile>({
     initialItems: [],
@@ -33,10 +35,10 @@ export function GlobalSearchInput({
   });
 
   const { isLoading, isError } = useQuery<Profile[]>({
-    queryKey: ["search", inputValue],
+    queryKey: ["search", value],
     queryFn: async () => {
-      if (!inputValue) return [];
-      const res = await api.get(`search/?q=${inputValue}`);
+      if (!value) return [];
+      const res = await api.get(`search/?q=${value}`);
       set(res.data);
       return res.data;
     },

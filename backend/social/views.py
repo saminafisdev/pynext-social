@@ -24,7 +24,12 @@ def search(request):
     query = request.query_params.get("q", "")
     profiles = Profile.objects.annotate(
         full_name=Concat("user__first_name", Value(" "), "user__last_name")
-    ).filter(Q(user__username__icontains=query) | Q(full_name__icontains=query))
+    ).filter(
+        Q(user__username__iexact=query)
+        | Q(user__first_name__istartswith=query)
+        | Q(user__last_name__istartswith=query)
+        | Q(full_name__istartswith=query)
+    )
 
     serializer = ProfileSerializer(profiles, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

@@ -52,7 +52,11 @@ export function GlobalSearchInput({
       >
         <Combobox.Control>
           <InputGroup startElement={<Search />}>
-            <Combobox.Input borderRadius={"full"} placeholder="Search" />
+            <Combobox.Input
+              borderRadius={"full"}
+              enterKeyHint="search"
+              placeholder="Search"
+            />
           </InputGroup>
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />

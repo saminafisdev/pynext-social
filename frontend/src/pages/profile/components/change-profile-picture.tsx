@@ -12,6 +12,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Pencil } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Profile } from "../types/profile";
+import { toaster } from "@/components/ui/toaster";
+import type { AxiosError } from "axios";
 
 export default function ChangeProfilePicture({
   profile,
@@ -46,6 +48,13 @@ export default function ChangeProfilePicture({
         queryKey: ["profile", profile.user.username],
       });
       window.location.reload();
+    },
+    onError: (error: AxiosError<{ detail: string }>) => {
+      console.log(error);
+      toaster.create({
+        title: error.response?.data?.detail,
+        type: "error",
+      });
     },
   });
 

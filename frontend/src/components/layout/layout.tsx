@@ -25,6 +25,7 @@ import {
   GlobalSearchInput,
   GlobalSearchInputDialog,
 } from "../global-search-input";
+import { Toaster } from "../ui/toaster";
 
 export function NavItem({
   to,
@@ -239,6 +240,7 @@ export default function RootLayout() {
 
   return (
     <Container fluid>
+      <Toaster />
       <HStack alignItems={"start"} gap={"6"}>
         <MobileBottomNav />
         <DesktopSidebar />

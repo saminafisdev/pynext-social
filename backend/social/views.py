@@ -1,5 +1,6 @@
 from django.db.models import Count, Exists, OuterRef, Q, Value
 from django.db.models.functions import Concat
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action, api_view
@@ -59,7 +60,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def get_object(self):
         username = self.kwargs.get(self.lookup_url_kwarg or self.lookup_field)
-        return self.queryset.get(user__username=username)
+        obj = get_object_or_404(self.queryset, user__username=username)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class PostViewSet(viewsets.ModelViewSet):

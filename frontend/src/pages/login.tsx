@@ -14,6 +14,7 @@ import {
   Link as ChakraLink,
   Stack,
   Text,
+  Alert,
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/api/apiClient";
@@ -58,59 +59,75 @@ export default function LoginPage() {
 
   return (
     <AbsoluteCenter w="full" p="2">
-      <Box as="form" maxW="md" boxSize={"lg"} onSubmit={handleSubmit(onSubmit)}>
-        <Fieldset.Root size="lg" maxW="md">
-          <Stack>
-            <Icon size={"2xl"} color={"yellow.500"} mx="auto" my={4}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M3 15c2.483 0 4.345-3 4.345-3s1.862 3 4.345 3c2.482 0 4.965-3 4.965-3s2.483 3 4.345 3M3 20c2.483 0 4.345-3 4.345-3s1.862 3 4.345 3c2.482 0 4.965-3 4.965-3s2.483 3 4.345 3m-2-10a7 7 0 1 0-14 0"
-                ></path>
-              </svg>
-            </Icon>
-            <Fieldset.Legend fontSize={"2xl"} textAlign={"center"}>
-              Sign in to Social
-            </Fieldset.Legend>
-          </Stack>
-
-          <Fieldset.Content>
-            <Field.Root invalid={Boolean(errors.username)}>
-              <Field.Label>Username</Field.Label>
-              <Input type="text" {...register("username")} />
-              {errors.username && (
-                <Field.ErrorText>{errors.username.message}</Field.ErrorText>
-              )}
-            </Field.Root>
-            <Field.Root invalid={Boolean(errors.password)}>
-              <Field.Label>Password</Field.Label>
-              <PasswordInput {...register("password")} />
-              {errors.password && (
-                <Field.ErrorText>{errors.password.message}</Field.ErrorText>
-              )}
-            </Field.Root>
-          </Fieldset.Content>
-
-          <Button
-            type="submit"
-            loading={loginMutation.isPending}
-            loadingText="Signing in"
-          >
-            Sign in
-          </Button>
-
-          <Text>
-            Don't have an account?{" "}
-            <ChakraLink colorPalette={"blue"} asChild>
-              <Link to={"/signup"}>Sign up</Link>
-            </ChakraLink>
-          </Text>
-        </Fieldset.Root>
-      </Box>
+      <Stack>
+        <Alert.Root status="info" variant="subtle" borderRadius="md" mb={4}>
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title fontWeight="bold">Demo Login Available</Alert.Title>
+            <Alert.Description>
+              To explore the app without creating an account, use:
+              <br />
+              <strong>Username:</strong> john.doe &nbsp; | &nbsp;
+              <strong>Password:</strong> admin123456
+            </Alert.Description>
+          </Alert.Content>
+        </Alert.Root>
+        <Box
+          as="form"
+          maxW="md"
+          boxSize={"lg"}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Fieldset.Root size="lg" maxW="md">
+            <Stack>
+              <Icon size={"2xl"} color={"yellow.500"} mx="auto" my={4}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                    d="M3 15c2.483 0 4.345-3 4.345-3s1.862 3 4.345 3c2.482 0 4.965-3 4.965-3s2.483 3 4.345 3M3 20c2.483 0 4.345-3 4.345-3s1.862 3 4.345 3c2.482 0 4.965-3 4.965-3s2.483 3 4.345 3m-2-10a7 7 0 1 0-14 0"
+                  ></path>
+                </svg>
+              </Icon>
+              <Fieldset.Legend fontSize={"2xl"} textAlign={"center"}>
+                Sign in to Social
+              </Fieldset.Legend>
+            </Stack>
+            <Fieldset.Content>
+              <Field.Root invalid={Boolean(errors.username)}>
+                <Field.Label>Username</Field.Label>
+                <Input type="text" {...register("username")} />
+                {errors.username && (
+                  <Field.ErrorText>{errors.username.message}</Field.ErrorText>
+                )}
+              </Field.Root>
+              <Field.Root invalid={Boolean(errors.password)}>
+                <Field.Label>Password</Field.Label>
+                <PasswordInput {...register("password")} />
+                {errors.password && (
+                  <Field.ErrorText>{errors.password.message}</Field.ErrorText>
+                )}
+              </Field.Root>
+            </Fieldset.Content>
+            <Button
+              type="submit"
+              loading={loginMutation.isPending}
+              loadingText="Signing in"
+            >
+              Sign in
+            </Button>
+            <Text>
+              Don't have an account?{" "}
+              <ChakraLink colorPalette={"blue"} asChild>
+                <Link to={"/signup"}>Sign up</Link>
+              </ChakraLink>
+            </Text>
+          </Fieldset.Root>
+        </Box>
+      </Stack>
     </AbsoluteCenter>
   );
 }

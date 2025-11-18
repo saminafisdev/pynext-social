@@ -4,7 +4,6 @@ import * as z from "zod";
 
 import { PasswordInput } from "@/components/ui/password-input";
 import {
-  AbsoluteCenter,
   Box,
   Button,
   Field,
@@ -15,6 +14,8 @@ import {
   Stack,
   Text,
   Alert,
+  Center,
+  VStack,
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/api/apiClient";
@@ -58,8 +59,8 @@ export default function LoginPage() {
   };
 
   return (
-    <AbsoluteCenter w="full" p="2">
-      <Stack>
+    <Center minH="dvh" mx="2">
+      <VStack>
         <Alert.Root status="info" variant="subtle" borderRadius="md" mb={4}>
           <Alert.Indicator />
           <Alert.Content>
@@ -72,12 +73,7 @@ export default function LoginPage() {
             </Alert.Description>
           </Alert.Content>
         </Alert.Root>
-        <Box
-          as="form"
-          maxW="md"
-          boxSize={"lg"}
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <Box as="form" width="full" onSubmit={handleSubmit(onSubmit)}>
           <Fieldset.Root size="lg" maxW="md">
             <Stack>
               <Icon size={"2xl"} color={"yellow.500"} mx="auto" my={4}>
@@ -127,7 +123,7 @@ export default function LoginPage() {
             </Text>
           </Fieldset.Root>
         </Box>
-      </Stack>
-    </AbsoluteCenter>
+      </VStack>
+    </Center>
   );
 }

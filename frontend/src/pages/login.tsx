@@ -68,7 +68,7 @@ export default function LoginPage() {
             <Alert.Description>
               To explore the app without creating an account, use:
               <br />
-              <strong>Username:</strong> john.doe &nbsp; | &nbsp;
+              <strong>Username:</strong> testuser123 &nbsp; | &nbsp;
               <strong>Password:</strong> admin123456
             </Alert.Description>
           </Alert.Content>

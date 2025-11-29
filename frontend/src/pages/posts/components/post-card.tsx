@@ -11,7 +11,6 @@ import {
   HoverCard,
   HStack,
   IconButton,
-  Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -22,7 +21,32 @@ import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import { Tooltip } from "@/components/ui/tooltip";
 
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+
+import { MasonryPhotoAlbum } from "react-photo-album";
+import "react-photo-album/masonry.css";
+
+const images = [
+  {
+    src: "https://images.unsplash.com/photo-1763757575623-ffafe0867aa3?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1763757575623-ffafe0867aa3?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1763757575623-ffafe0867aa3?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1763757575623-ffafe0867aa3?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1763757575623-ffafe0867aa3?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+];
+
 export default function PostCard({ post }: { post: Post }) {
+  const [index, setIndex] = useState(-1);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user } = post.author;
@@ -145,7 +169,32 @@ export default function PostCard({ post }: { post: Post }) {
         cursor={"pointer"}
       >
         {post?.content && <Text whiteSpace={"pre-wrap"}>{post.content}</Text>}
-        {post?.image && <Image my={2} src={post.image} />}
+        {/* <RowsPhotoAlbum
+          photos={images}
+          rowConstraints={{
+            maxPhotos: 2,
+          }}
+          spacing={1}
+          targetRowHeight={150}
+          onClick={({ index: current }) => setIndex(current)}
+        /> */}
+        <MasonryPhotoAlbum
+          photos={post.images.map((img) => ({
+            src: img.url,
+            width: img.width,
+            height: img.height,
+          }))}
+          columns={2}
+          spacing={1}
+          onClick={({ index: current }) => setIndex(current)}
+        />
+
+        <Lightbox
+          index={index}
+          slides={images}
+          open={index >= 0}
+          close={() => setIndex(-1)}
+        />
       </Card.Body>
       <Card.Footer>
         <Button variant={"ghost"} onClick={() => mutate()}>

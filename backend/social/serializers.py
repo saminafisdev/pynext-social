@@ -1,9 +1,10 @@
 from os import read
 from attr import fields
+import cloudinary
 from rest_framework import serializers
 
 from core.serializers import UserSerializer
-from .models import Bookmark, Post, Profile, PostLike, Comment
+from .models import Bookmark, Post, PostImage, Profile, PostLike, Comment
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -35,8 +36,20 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ("id", "author", "content", "created_at", "updated_at")
 
 
+class PostImageSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = PostImage
+        fields = ["id", "url", "width", "height"]
+
+    def get_url(self, obj):
+        return obj.image.url
+
+
 class PostSerializer(serializers.ModelSerializer):
     author = ProfileSerializer(read_only=True)
+    images = PostImageSerializer(many=True, required=False)
     likes_count = serializers.IntegerField(read_only=True)
     comments_count = serializers.IntegerField(read_only=True)
     has_liked = serializers.BooleanField(read_only=True)
@@ -49,7 +62,7 @@ class PostSerializer(serializers.ModelSerializer):
             "id",
             "author",
             "content",
-            "image",
+            "images",
             "has_liked",
             "likes_count",
             "is_owner",
@@ -81,27 +94,41 @@ class PostSerializer(serializers.ModelSerializer):
             return obj.is_bookmarked
         return False
 
-    def create(self, validated_data):
-        profile = self.context["request"].user.profile
-        validated_data["author"] = profile
-        return super().create(validated_data)
-
     def validate(self, data):
         """
         Check that a post contains either text content, an image, or both.
         """
         content = data.get("content")
-        image = data.get("image")
-
         text_content = content.strip() if content else None
 
+        images = self.context["request"].FILES.getlist("images")
+
         # Check if both are empty/null
-        if not text_content and not image:
+        if not text_content and len(images) == 0:
             raise serializers.ValidationError(
                 "A post must contain either text content, an image, or both."
             )
 
         return data
+
+    def create(self, validated_data):
+        profile = self.context["request"].user.profile
+        validated_data["author"] = profile
+        uploaded_images = self.context["request"].FILES.getlist("images")
+        post = super().create(validated_data)
+        for image_data in uploaded_images:
+            print(image_data)
+            # Upload manually to Cloudinary to get metadata
+            upload = cloudinary.uploader.upload(image_data, folder="post_images")
+
+            PostImage.objects.create(
+                post=post,
+                image=upload["public_id"],
+                width=upload["width"],
+                height=upload["height"],
+            )
+
+        return post
 
 
 class BookmarkSerializer(serializers.ModelSerializer):

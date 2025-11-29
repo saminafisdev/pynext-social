@@ -188,3 +188,10 @@ AUTH_COOKIE_PATH = "/"
 AUTH_COOKIE_SAME_SITE = "None"
 
 ALLOWED_WS_ORIGINS = []
+
+
+# Set max upload size for request body (e.g., 500MB)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
+
+# Set max size for file uploads held in memory (e.g., 500MB)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB

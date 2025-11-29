@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django_resized import ResizedImageField
+from cloudinary.models import CloudinaryField
 
 
 class Profile(models.Model):
@@ -32,13 +33,6 @@ class Post(models.Model):
         null=True,
         help_text="The text content of the post.",
     )
-    image = ResizedImageField(
-        quality=85,
-        upload_to="post_images/",
-        blank=True,
-        null=True,
-        help_text="The optional image for the post.",
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     edited = models.BooleanField(default=False)
@@ -47,6 +41,18 @@ class Post(models.Model):
         if self.pk:
             self.edited = True
         return super().save(*args, **kwargs)
+
+
+class PostImage(models.Model):
+    post = models.ForeignKey(
+        Post, related_name="images", null=True, blank=True, on_delete=models.CASCADE
+    )
+    image = CloudinaryField("post_images")
+    width = models.IntegerField(null=True, blank=True)
+    height = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Image for Post ID {self.post.id}"
 
 
 class Comment(models.Model):

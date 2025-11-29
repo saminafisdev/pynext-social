@@ -34,7 +34,7 @@ export default function BookmarksCard({
         <Image
           objectFit="cover"
           maxW="3/12"
-          src={bookmark.post.image ?? bookmark.post.author.profile_picture}
+          src={bookmark.post.author.profile_picture}
           alt={`Post by ${bookmark.post.author.user.full_name}`}
         />
         <Box>

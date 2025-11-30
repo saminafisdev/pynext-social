@@ -30,10 +30,10 @@ export default function PostCompose() {
 
   // Chakra UI File Upload items
   const fileUpload = useFileUpload({
-    maxFiles: 1,
-    maxFileSize: 3_000_000, // 3 MB
+    maxFiles: 5,
+    maxFileSize: 5_000_000, // 5 MB
     accept: {
-      "image/*": [".png", ".jpg", ".jpeg", ".gif"],
+      image: [".png", ".jpg", ".jpeg", ".gif", ".webp", ".heif", ".tiff"],
     },
   });
 
@@ -44,9 +44,9 @@ export default function PostCompose() {
     mutationFn: () => {
       const formData = new FormData();
       formData.append("content", postConent);
-      const image = fileUpload.acceptedFiles[0];
-      if (image) {
-        formData.append("image", image);
+      const images = fileUpload.acceptedFiles;
+      if (images) {
+        images.forEach((image) => formData.append("images", image));
       }
 
       return api.post("posts/", formData, {
@@ -135,7 +135,6 @@ export default function PostCompose() {
                     <Box
                       bg={"bg.muted"}
                       borderWidth={"2px"}
-                      borderRadius={"xl"}
                       _focusWithin={{
                         borderColor: "fg", // highlight color when textarea inside is focused
                       }}

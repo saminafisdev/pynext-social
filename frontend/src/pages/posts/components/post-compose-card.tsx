@@ -19,7 +19,7 @@ import {
   useFileUpload,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, User } from "lucide-react";
 import { useRef, useState } from "react";
 import PostImageUploadList from "./post-image-upload-list";
 
@@ -87,7 +87,7 @@ export default function PostCompose() {
         <HStack>
           <Avatar
             src={profile.profile_picture}
-            fallback={profile.user.full_name}
+            fallback={<User />}
           />
           <Dialog.Root
             size={{ mdDown: "full", md: "lg" }}
@@ -115,7 +115,7 @@ export default function PostCompose() {
                   <HStack>
                     <Avatar
                       src={profile.profile_picture}
-                      fallback={profile.user.full_name}
+                      fallback={<User />}
                     />
                     <Stack gap={0}>
                       <Dialog.Title>{profile.user.full_name}</Dialog.Title>

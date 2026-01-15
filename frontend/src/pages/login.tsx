@@ -19,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import api from "@/api/apiClient";
+import { AxiosError } from "axios";
 import { Link, useNavigate } from "react-router";
 
 const loginSchema = z.object({
@@ -46,15 +47,19 @@ export default function LoginPage() {
       const { data } = await api.post("auth/jwt/create/", loginFields);
       return data;
     },
+    onError: (error: AxiosError) => {
+      console.error(error);
+    },
   });
 
   const onSubmit = async (values: LoginInput) => {
     try {
       await loginMutation.mutateAsync(values);
-      reset();
       navigate("/");
     } catch (e) {
       console.error(e);
+    } finally {
+      reset({ password: "" })
     }
   };
 
@@ -73,6 +78,18 @@ export default function LoginPage() {
             </Alert.Description>
           </Alert.Content>
         </Alert.Root>
+        {loginMutation.isError && (
+          <Alert.Root status="error" variant="subtle" borderRadius="md" mb={4}>
+            <Alert.Indicator />
+            <Alert.Content>
+              {/* <Alert.Title fontWeight="bold">Error</Alert.Title> */}
+              <Alert.Description>
+                {(loginMutation.error as AxiosError<{ detail: string }>)?.response
+                  ?.data?.detail || "An error occurred"}
+              </Alert.Description>
+            </Alert.Content>
+          </Alert.Root>
+        )}
         <Box as="form" width="full" onSubmit={handleSubmit(onSubmit)}>
           <Fieldset.Root size="lg" maxW="md">
             <Stack>
